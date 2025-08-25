@@ -1,0 +1,17 @@
+package exe201.studymatebackend.dto.request.authentication;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class LoginRequest {
+    @NotBlank(message = "Username không thể để trống")
+    private String username;
+
+    @NotBlank(message = "Mật khẩu không thể để trống")
+    private String password;
+}
