@@ -1,11 +1,14 @@
 package exe201.studymatebackend.controller;
 
 import exe201.studymatebackend.dto.request.authentication.LoginRequest;
+import exe201.studymatebackend.dto.request.authentication.RegisterRequest;
+import exe201.studymatebackend.dto.response.ApiResponse;
 import exe201.studymatebackend.dto.response.authentication.LoginResponse;
+import exe201.studymatebackend.dto.response.authentication.RegisterResponse;
 import exe201.studymatebackend.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +20,23 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse result = authService.login(loginRequest);
-        return ResponseEntity.ok(result);
+        return ApiResponse.<LoginResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Login successfully")
+                .resutl(result)
+                .build();
 
+    }
+
+    @PostMapping("/register")
+    public ApiResponse<RegisterResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
+        RegisterResponse result = authService.register(registerRequest);
+        return ApiResponse.<RegisterResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Successfully registered")
+                .resutl(result)
+                .build();
     }
 }
