@@ -1,16 +1,14 @@
-package exe201.studymatebackend.dto.response;
-
+package exe201.studymatebackend.dto.request.account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class ApiResponse<T> {
-    private int code;
-    private String message;
-    private T result;
+public class UpdateAccountRequest {
+    private String email;
+    private String password;
 }
