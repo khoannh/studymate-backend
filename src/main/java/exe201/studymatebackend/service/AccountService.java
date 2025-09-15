@@ -11,6 +11,6 @@ public interface AccountService {
     List<GetAllAccountResponse> getAllAccount();
     GetAccountResponse getAccountById(Integer id);
     GetAccountResponse createAccount(CreateAccountRequest request);
-    GetAccountResponse updateAccount(Integer id, UpdateAccountRequest request);
-    void deleteAccount(Integer id);
+    GetAccountResponse updateAccountByUsername(String username, UpdateAccountRequest request);
+    void banAccount(Integer id);
 }

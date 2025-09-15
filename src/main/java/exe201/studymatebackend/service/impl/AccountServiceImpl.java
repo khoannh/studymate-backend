@@ -68,25 +68,29 @@ public class AccountServiceImpl implements AccountService {
 
     // Update account
     @Override
-    public GetAccountResponse updateAccount(Integer id, UpdateAccountRequest request) {
-        Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
+    public GetAccountResponse updateAccountByUsername(String username, UpdateAccountRequest request) {
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) {
+            throw new RuntimeException("Account not found with username: " + username);
+        }
 
         if (request.getEmail() != null) account.setEmail(request.getEmail());
-        if (request.getPassword() != null) account.setPassword(request.getPassword()); // nhớ encode nếu có Spring Security
+        if (request.getPassword() != null) account.setPassword(request.getPassword()); // nhớ encode nếu có security
         account.setUpdatedAt(LocalDateTime.now());
 
         Account updated = accountRepository.save(account);
         return mapToGetAccountResponse(updated);
     }
 
-    // Delete account
     @Override
-    public void deleteAccount(Integer id) {
-        if (!accountRepository.existsById(id)) {
-            throw new RuntimeException("Account not found with id: " + id);
-        }
-        accountRepository.deleteById(id);
+    public void banAccount(Integer id) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
+
+        account.setIsActive(false);
+        account.setUpdatedAt(LocalDateTime.now());
+
+        accountRepository.save(account);
     }
 
     // -------------------
