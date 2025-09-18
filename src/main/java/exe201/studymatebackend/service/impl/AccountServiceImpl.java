@@ -26,13 +26,15 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     public List<GetAllAccountResponse> getAllAccount() {
         List<Account> accountList = accountRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         if (accountList.isEmpty()) {
-            throw new RuntimeException("No accounts found");
+            throw new AppException(ErrorCode.USER_DOES_NOT_EXIST);
         } else {
             return accountList.stream()
                     .map(account -> GetAllAccountResponse.builder()
@@ -154,11 +156,9 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void banAccount(Integer id) {
         Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
-
+                .orElseThrow(() -> new AppException(ErrorCode.USER_DOES_NOT_EXIST));
         account.setIsActive(false);
         account.setUpdatedAt(LocalDateTime.now());
-
         accountRepository.save(account);
     }
 

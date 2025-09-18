@@ -67,14 +67,13 @@ public class AccountController {
 
     // Renew current user's password
     @PutMapping("/accounts/current/renew-password")
-    public ApiResponse<RenewPasswordResponse> renewPassword(
+    public ApiResponse<Void> renewPassword(
             @RequestBody RenewPasswordRequest request) {
 
-        RenewPasswordResponse result = accountService.renewPassword(request);
-        return ApiResponse.<RenewPasswordResponse>builder()
+        accountService.renewPassword(request);
+        return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Password renewed successfully")
-                .result(result)
                 .build();
     }
 
