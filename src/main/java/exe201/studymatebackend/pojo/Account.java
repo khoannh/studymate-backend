@@ -13,36 +13,37 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Entity
-@Table
+@Table(name = "account")
 @Data
 public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer accountID;  // viết liền ID như vầy nha
+    @Column(name = "accountid")
+    private Integer accountID;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(nullable = false,unique = true, length = 50)
+    @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "role", nullable = false)
     private Role role;
 
-    @Column(nullable = false)
+    @Column(name = "token", nullable = false)
     private int token;
 
-    @Column(nullable = true)
+    @Column(name = "created_at", nullable = true)
     private LocalDateTime createdAt;
 
-    @Column(nullable = true)
+    @Column(name = "updated_at", nullable = true)
     private LocalDateTime updatedAt;
 
-    @Column(nullable = false)
+    @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
     public Account() {

@@ -25,7 +25,7 @@ public class AuthController {
         return ApiResponse.<LoginResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Login successfully")
-                .resutl(result)
+                .result(result)
                 .build();
 
     }
@@ -36,7 +36,7 @@ public class AuthController {
         return ApiResponse.<RegisterResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Successfully registered")
-                .resutl(result)
+                .result(result)
                 .build();
     }
 }
