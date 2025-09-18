@@ -1,17 +1,12 @@
 package exe201.studymatebackend.controller;
 
-import exe201.studymatebackend.dto.request.account.CreateAccountRequest;
 import exe201.studymatebackend.dto.request.account.RenewPasswordRequest;
 import exe201.studymatebackend.dto.request.account.UpdateAccountRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
 import exe201.studymatebackend.dto.response.account.*;
-import exe201.studymatebackend.pojo.Account;
 import exe201.studymatebackend.service.AccountService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +27,7 @@ public class AccountController {
                 .result(result)
                 .build();
     }
+
     // Get one account by id
     @GetMapping("/accounts/{id}")
     public ApiResponse<GetAccountResponse> getAccountById(@PathVariable Integer id) {
@@ -42,7 +38,6 @@ public class AccountController {
                 .result(account)
                 .build();
     }
-
 
 
     @PutMapping("/accounts/")
@@ -59,6 +54,7 @@ public class AccountController {
                 .result(result)
                 .build();
     }
+
     @GetMapping("/accounts/current")
     public ApiResponse<ViewAccountResponse> viewCurrentAccount() {
         ViewAccountResponse result = accountService.viewCurrentAccount();
@@ -68,20 +64,18 @@ public class AccountController {
                 .result(result)
                 .build();
     }
+
     // Renew current user's password
     @PutMapping("/accounts/current/renew-password")
-    public ApiResponse<RenewPasswordResponse> renewPassword(
+    public ApiResponse<Void> renewPassword(
             @RequestBody RenewPasswordRequest request) {
 
-        RenewPasswordResponse result = accountService.renewPassword(request);
-        return ApiResponse.<RenewPasswordResponse>builder()
+        accountService.renewPassword(request);
+        return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Password renewed successfully")
-                .result(result)
                 .build();
     }
-
-
 
 
     // Ban account
@@ -93,5 +87,16 @@ public class AccountController {
                 .message("Account banned successfully")
                 .build();
     }
-}
 
+    @GetMapping("/account")
+    public ApiResponse<GetAccountPageResponse> getAccounts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
+        GetAccountPageResponse result = accountService.getAccountPage(page, size);
+        return ApiResponse.<GetAccountPageResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Retrieved all accounts successfully")
+                .result(result)
+                .build();
+    }
+}

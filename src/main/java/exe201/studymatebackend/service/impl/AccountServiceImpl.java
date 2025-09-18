@@ -1,41 +1,43 @@
 package exe201.studymatebackend.service.impl;
 
-import exe201.studymatebackend.dto.request.account.CreateAccountRequest;
 import exe201.studymatebackend.dto.request.account.RenewPasswordRequest;
 import exe201.studymatebackend.dto.request.account.UpdateAccountRequest;
 import exe201.studymatebackend.dto.response.account.*;
-import exe201.studymatebackend.dto.response.authentication.RegisterResponse;
-import exe201.studymatebackend.enums.Role;
 import exe201.studymatebackend.exception.AppException;
 import exe201.studymatebackend.exception.ErrorCode;
 import exe201.studymatebackend.pojo.Account;
 import exe201.studymatebackend.repository.AccountRepository;
 import exe201.studymatebackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<GetAllAccountResponse> getAllAccount() {
         List<Account> accountList = accountRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         if (accountList.isEmpty()) {
-            throw new RuntimeException("No accounts found");
+            throw new AppException(ErrorCode.USER_DOES_NOT_EXIST);
         } else {
             return accountList.stream()
-                    .map( account -> GetAllAccountResponse.builder()
+                    .map(account -> GetAllAccountResponse.builder()
                             .accountID(account.getAccountID())
                             .username(account.getUsername())
                             .email(account.getEmail())
@@ -48,6 +50,39 @@ public class AccountServiceImpl implements AccountService {
                     ).toList();
         }
     }
+
+    @Override
+    public GetAccountPageResponse getAccountPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Account> accountPage = accountRepository.findAll(pageable);
+        if (accountPage.isEmpty()) {
+            throw new AppException(ErrorCode.USER_DOES_NOT_EXIST);
+        }
+        List<GetAllAccountResponse> content = accountPage.getContent().stream().map(
+                account -> GetAllAccountResponse.builder()
+                        .accountID(account.getAccountID())
+                        .username(account.getUsername())
+                        .email(account.getEmail())
+                        .role(account.getRole())
+                        .token(account.getToken())
+                        .createdAt(account.getCreatedAt())
+                        .updatedAt(account.getUpdatedAt())
+                        .isActive(account.getIsActive())
+                        .build()
+
+        ).toList();
+
+        return GetAccountPageResponse.builder()
+                .content(content)
+                .pageNumber(accountPage.getNumber())
+                .pageSize(accountPage.getSize())
+                .totalPages(accountPage.getTotalPages())
+                .totalElements(accountPage.getTotalElements())
+                .isLastPage(accountPage.isLast())
+                .build();
+    }
+
+
     // get 1 account by ID
     @Override
     public GetAccountResponse getAccountById(Integer id) {
@@ -59,6 +94,7 @@ public class AccountServiceImpl implements AccountService {
 
     // Update account
     @Override
+    @Transactional
     public UpdateAccountResponse updateAccount(UpdateAccountRequest request) {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer acID = account.getAccountID();
@@ -75,6 +111,7 @@ public class AccountServiceImpl implements AccountService {
                 .email(currentUser.getEmail()).build();
 
     }
+
     @Override
     public ViewAccountResponse viewCurrentAccount() {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -97,35 +134,33 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public RenewPasswordResponse renewPassword(RenewPasswordRequest request) {
+    @Transactional
+    public void renewPassword(RenewPasswordRequest request) {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer acID = account.getAccountID();
         Account currentUser = accountRepository.findById(acID)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_DOES_NOT_EXIST));
-
+        if (!currentUser.getPassword().equals(passwordEncoder.encode(request.getOldPassword()))) {
+            throw new AppException(ErrorCode.OLD_PASSWORD_IS_WRONG);
+        }
+        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_DOES_NOT_MATCH);
+        }
         currentUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
         currentUser.setUpdatedAt(LocalDateTime.now());
-
         accountRepository.save(currentUser);
-
-        return RenewPasswordResponse.builder()
-                .accountID(currentUser.getAccountID())
-                .message("Password updated successfully")
-                .build();
     }
 
 
     @Override
+    @Transactional
     public void banAccount(Integer id) {
         Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
-
+                .orElseThrow(() -> new AppException(ErrorCode.USER_DOES_NOT_EXIST));
         account.setIsActive(false);
         account.setUpdatedAt(LocalDateTime.now());
-
         accountRepository.save(account);
     }
-
 
 
     // -------------------
