@@ -1,10 +1,11 @@
 package exe201.studymatebackend.controller;
 
 import exe201.studymatebackend.dto.request.account.CreateAccountRequest;
+import exe201.studymatebackend.dto.request.account.RenewPasswordRequest;
 import exe201.studymatebackend.dto.request.account.UpdateAccountRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
-import exe201.studymatebackend.dto.response.account.GetAccountResponse;
-import exe201.studymatebackend.dto.response.account.GetAllAccountResponse;
+import exe201.studymatebackend.dto.response.account.*;
+import exe201.studymatebackend.pojo.Account;
 import exe201.studymatebackend.service.AccountService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,28 +45,43 @@ public class AccountController {
 
 
 
-    // Update account by username
-    @PutMapping("/accounts/{username}")
-    public ApiResponse<GetAccountResponse> updateAccount(@PathVariable String username,
-                                                         @RequestBody UpdateAccountRequest request,
-                                                         HttpServletRequest httpRequest) {
-        String currentUsername = (String) httpRequest.getAttribute("username");
+    @PutMapping("/accounts/")
+    public ApiResponse<UpdateAccountResponse> updateAccount(
 
-        if (!username.equals(currentUsername)) {
-            return ApiResponse.<GetAccountResponse>builder()
-                    .code(HttpStatus.FORBIDDEN.value())
-                    .message("You can only update your own account")
-                    .result(null)
-                    .build();
-        }
+            @RequestBody UpdateAccountRequest request) {
 
-        GetAccountResponse updated = accountService.updateAccountByUsername(username, request);
-        return ApiResponse.<GetAccountResponse>builder()
+
+        UpdateAccountResponse result = accountService.updateAccount(request);
+
+        return ApiResponse.<UpdateAccountResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Account updated successfully")
-                .result(updated)
+                .result(result)
                 .build();
     }
+    @GetMapping("/accounts/current")
+    public ApiResponse<ViewAccountResponse> viewCurrentAccount() {
+        ViewAccountResponse result = accountService.viewCurrentAccount();
+        return ApiResponse.<ViewAccountResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Retrieved current account successfully")
+                .result(result)
+                .build();
+    }
+    // Renew current user's password
+    @PutMapping("/accounts/current/renew-password")
+    public ApiResponse<RenewPasswordResponse> renewPassword(
+            @RequestBody RenewPasswordRequest request) {
+
+        RenewPasswordResponse result = accountService.renewPassword(request);
+        return ApiResponse.<RenewPasswordResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Password renewed successfully")
+                .result(result)
+                .build();
+    }
+
+
 
 
     // Ban account
