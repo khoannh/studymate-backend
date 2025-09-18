@@ -22,7 +22,7 @@ public class RoomController {
         return ApiResponse.<CreateRoomResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message("Room created successfully")
-                .resutl(result)
+                .result(result)
                 .build();
     }
 
@@ -45,7 +45,7 @@ public class RoomController {
         return ApiResponse.<GetRoomPageResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Retrieved all rooms successfully")
-                .resutl(result)
+                .result(result)
                 .build();
     }
 

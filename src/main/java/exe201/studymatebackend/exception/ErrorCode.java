@@ -15,6 +15,7 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXIST(2001, "Email is already registered", HttpStatus.BAD_REQUEST),
     PASSWORD_DOES_NOT_MATCH(2002, "Password does not match", HttpStatus.BAD_REQUEST),
     USER_DOES_NOT_EXIST(2003, "User does not exist", HttpStatus.BAD_REQUEST),
+    OLD_PASSWORD_IS_WRONG(2004, "Old password is wrong", HttpStatus.BAD_REQUEST),
     // Room
     NOT_ENOUGH_TOKEN(3000, "Not enough token.", HttpStatus.BAD_REQUEST),
     ROOM_ALREADY_EXIST(3001, "Room already exist", HttpStatus.BAD_REQUEST),

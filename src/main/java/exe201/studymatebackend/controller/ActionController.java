@@ -35,7 +35,7 @@ public class ActionController {
         return ApiResponse.<UpdateActionTokenResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Action updated successfully")
-                .resutl(result)
+                .result(result)
                 .build();
     }
 }
