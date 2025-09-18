@@ -34,7 +34,7 @@ public class AuthController {
     public ApiResponse<RegisterResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         RegisterResponse result = authService.register(registerRequest);
         return ApiResponse.<RegisterResponse>builder()
-                .code(HttpStatus.OK.value())
+                .code(HttpStatus.CREATED.value())
                 .message("Successfully registered")
                 .resutl(result)
                 .build();

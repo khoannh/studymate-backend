@@ -2,19 +2,21 @@ package exe201.studymatebackend.pojo;
 
 import exe201.studymatebackend.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table
 @Data
+@AllArgsConstructor
 public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +28,7 @@ public class Account implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false,unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     @Enumerated(EnumType.STRING)
@@ -44,6 +46,9 @@ public class Account implements UserDetails {
 
     @Column(nullable = false)
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<AccountRoom> accountRoomList;
 
     public Account() {
     }

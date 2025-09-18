@@ -14,6 +14,15 @@ public enum ErrorCode {
     USERNAME_ALREADY_EXIST(2000, "Username is already registered", HttpStatus.BAD_REQUEST),
     EMAIL_ALREADY_EXIST(2001, "Email is already registered", HttpStatus.BAD_REQUEST),
     PASSWORD_DOES_NOT_MATCH(2002, "Password does not match", HttpStatus.BAD_REQUEST),
+    USER_DOES_NOT_EXIST(2003, "User does not exist", HttpStatus.BAD_REQUEST),
+    // Room
+    NOT_ENOUGH_TOKEN(3000, "Not enough token.", HttpStatus.BAD_REQUEST),
+    ROOM_ALREADY_EXIST(3001, "Room already exist", HttpStatus.BAD_REQUEST),
+    ACCOUNT_ALREADY_JOINED_ROOM(3002, "Account already joined this room", HttpStatus.BAD_REQUEST),
+    ROOM_ALREADY_FULL(3003, "Room already full", HttpStatus.BAD_REQUEST),
+    // Action
+    ACTION_ALREADY_EXIST(4000, "Action already exist", HttpStatus.BAD_REQUEST),
+    ACTION_DOES_NOT_EXIST(4001, "Action does not exist", HttpStatus.BAD_REQUEST),
     ;
     private int detailCode;
     private String detailMessage;

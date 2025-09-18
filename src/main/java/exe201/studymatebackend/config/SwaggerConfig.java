@@ -15,9 +15,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Car Management API")
+                        .title("Studymate Backend API")
                         .version("1.0")
-                        .description("API documentation for Car Management System"))
+                        .description("API documentation for Studymate"))
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
                 .components(new io.swagger.v3.oas.models.Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()
