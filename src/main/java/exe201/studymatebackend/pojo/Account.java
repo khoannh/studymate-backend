@@ -3,51 +3,55 @@ package exe201.studymatebackend.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import exe201.studymatebackend.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
-@Table(name = "account")
+@Table
 @Data
+@AllArgsConstructor
 public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "accountid")
-    private Integer accountID;
+    private Integer accountID;  // viết liền ID như vầy nha
 
-    @Column(name = "email", nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "username", nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(nullable = false)
     private Role role;
 
-    @Column(name = "token", nullable = false)
+    @Column(nullable = false)
     private int token;
 
-    @Column(name = "created_at", nullable = true)
+    @Column(nullable = true)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = true)
+    @Column(nullable = true)
     private LocalDateTime updatedAt;
 
-    @Column(name = "is_active", nullable = false)
+    @Column(nullable = false)
     private Boolean isActive;
     @Column(name = "avatar", columnDefinition = "BYTEA")
     private byte[] avatar;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<AccountRoom> accountRoomList;
 
     public Account() {
     }
@@ -100,7 +104,7 @@ public class Account implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isActive;
     }
 
 

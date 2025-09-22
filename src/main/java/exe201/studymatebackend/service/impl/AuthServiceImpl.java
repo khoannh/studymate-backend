@@ -81,5 +81,6 @@ public class AuthServiceImpl implements AuthService {
         return RegisterResponse.builder()
                 .username(registerRequest.getUsername())
                 .build();
+
     }
 }

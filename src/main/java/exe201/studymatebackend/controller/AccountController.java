@@ -5,7 +5,9 @@ import exe201.studymatebackend.dto.request.account.RenewPasswordRequest;
 import exe201.studymatebackend.dto.request.account.UpdateAccountRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
 import exe201.studymatebackend.dto.response.account.*;
+import exe201.studymatebackend.pojo.Account;
 import exe201.studymatebackend.service.AccountService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,7 @@ public class AccountController {
                 .result(result)
                 .build();
     }
+
     // Get one account by id
     @GetMapping("/accounts/{id}")
     public ApiResponse<GetAccountResponse> getAccountById(@PathVariable Integer id) {
@@ -59,6 +62,7 @@ public class AccountController {
                 .result(result)
                 .build();
     }
+
     @GetMapping("/accounts/current")
     public ApiResponse<ViewAccountResponse> viewCurrentAccount() {
         ViewAccountResponse result = accountService.viewCurrentAccount();
@@ -68,16 +72,16 @@ public class AccountController {
                 .result(result)
                 .build();
     }
+
     // Renew current user's password
     @PutMapping("/accounts/current/renew-password")
-    public ApiResponse<RenewPasswordResponse> renewPassword(
+    public ApiResponse<Void> renewPassword(
             @RequestBody RenewPasswordRequest request) {
 
-        RenewPasswordResponse result = accountService.renewPassword(request);
-        return ApiResponse.<RenewPasswordResponse>builder()
+        accountService.renewPassword(request);
+        return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Password renewed successfully")
-                .result(result)
                 .build();
     }
     // Upload avatar
@@ -102,8 +106,6 @@ public class AccountController {
     }
 
 
-
-
     // Ban account
     @PutMapping("/accounts/{id}/ban")
     public ApiResponse<Void> banAccount(@PathVariable Integer id) {
@@ -111,6 +113,18 @@ public class AccountController {
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Account banned successfully")
+                .build();
+    }
+
+    @GetMapping("/account")
+    public ApiResponse<GetAccountPageResponse> getAccounts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
+        GetAccountPageResponse result = accountService.getAccountPage(page, size);
+        return ApiResponse.<GetAccountPageResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Retrieved all accounts successfully")
+                .result(result)
                 .build();
     }
 }
