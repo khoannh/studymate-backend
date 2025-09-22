@@ -15,6 +15,8 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXIST(2001, "Email is already registered", HttpStatus.BAD_REQUEST),
     PASSWORD_DOES_NOT_MATCH(2002, "Password does not match", HttpStatus.BAD_REQUEST),
     USER_DOES_NOT_EXIST(2003, "User does not exist", HttpStatus.BAD_REQUEST),
+    FILE_UPLOAD_FAILED(2004, "File upload failed",HttpStatus.BAD_REQUEST)
+    ,FILE_NOT_FOUND(2005, "File not found",HttpStatus.BAD_REQUEST)
     ;
     private int detailCode;
     private String detailMessage;

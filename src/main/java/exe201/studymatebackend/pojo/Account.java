@@ -1,5 +1,6 @@
 package exe201.studymatebackend.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import exe201.studymatebackend.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -45,6 +46,8 @@ public class Account implements UserDetails {
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
+    @Column(name = "avatar", columnDefinition = "BYTEA")
+    private byte[] avatar;
 
     public Account() {
     }

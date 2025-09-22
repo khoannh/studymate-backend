@@ -1,18 +1,18 @@
 package exe201.studymatebackend.controller;
 
-import exe201.studymatebackend.dto.request.account.CreateAccountRequest;
+
 import exe201.studymatebackend.dto.request.account.RenewPasswordRequest;
 import exe201.studymatebackend.dto.request.account.UpdateAccountRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
 import exe201.studymatebackend.dto.response.account.*;
-import exe201.studymatebackend.pojo.Account;
 import exe201.studymatebackend.service.AccountService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -79,6 +79,26 @@ public class AccountController {
                 .message("Password renewed successfully")
                 .result(result)
                 .build();
+    }
+    // Upload avatar
+    @PostMapping(value = "/accounts/current/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<AvatarResponse> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        AvatarResponse result = accountService.uploadAvatar(file);
+        return ApiResponse.<AvatarResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Avatar uploaded successfully")
+                .result(result)
+                .build();
+    }
+
+    // Get avatar
+    @GetMapping("/accounts/current/avatar")
+    public ResponseEntity<byte[]> getCurrentUserAvatar() {
+        byte[] image = accountService.getCurrentUserAvatar();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"avatar.png\"")
+                .contentType(MediaType.IMAGE_PNG)
+                .body(image);
     }
 
 
