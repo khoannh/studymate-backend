@@ -26,6 +26,8 @@ public enum ErrorCode {
     // Action
     ACTION_ALREADY_EXIST(4000, "Action already exist", HttpStatus.BAD_REQUEST),
     ACTION_DOES_NOT_EXIST(4001, "Action does not exist", HttpStatus.BAD_REQUEST),
+    // Package
+    PACKAGE_ID_NOT_FOUND(5001, "Package id not found", HttpStatus.BAD_REQUEST)
 
     ;
     private int detailCode;
