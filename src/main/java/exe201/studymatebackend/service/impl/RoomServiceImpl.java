@@ -49,17 +49,17 @@ public class RoomServiceImpl implements RoomService {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer accountID = account.getAccountID();
         Account owner = accountRepository.findByAccountID(accountID);
-        int token = owner.getToken();
+        int coin = owner.getCoin();
         if (actionRepository.findByActionName("Create new room") == null) {
             throw new AppException(ErrorCode.ACTION_DOES_NOT_EXIST);
         }
-        int cost = actionRepository.findByActionName("Create new room").getActionToken();
-        if (token < cost) {
-            throw new AppException(ErrorCode.NOT_ENOUGH_TOKEN);
+        int cost = actionRepository.findByActionName("Create new room").getActionCoin();
+        if (coin < cost) {
+            throw new AppException(ErrorCode.NOT_ENOUGH_COIN);
         } else {
-            token = token - cost;
+            coin = coin - cost;
         }
-        owner.setToken(token);
+        owner.setCoin(coin);
 
         if (roomRepository.findByRoomName(request.getRoomName()) != null) {
             throw new AppException(ErrorCode.ROOM_ALREADY_EXIST);
@@ -130,17 +130,17 @@ public class RoomServiceImpl implements RoomService {
             member.setAccountRoomList(new ArrayList<>());
         }
         member.getAccountRoomList().add(accountRoom);
-        int token = member.getToken();
+        int coin = member.getCoin();
         if (actionRepository.findByActionName("Join room") == null) {
             throw new AppException(ErrorCode.ACTION_DOES_NOT_EXIST);
         }
-        int cost = actionRepository.findByActionName("Join room").getActionToken();
-        if (token < cost) {
-            throw new AppException(ErrorCode.NOT_ENOUGH_TOKEN);
+        int cost = actionRepository.findByActionName("Join room").getActionCoin();
+        if (coin < cost) {
+            throw new AppException(ErrorCode.NOT_ENOUGH_COIN);
         } else {
-            token = token - cost;
+            coin = coin - cost;
         }
-        member.setToken(token);
+        member.setCoin(coin);
 
         if (room.getAccountRoomList() == null) {
             room.setAccountRoomList(new ArrayList<>());

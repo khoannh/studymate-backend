@@ -1,7 +1,7 @@
 package exe201.studymatebackend.service.impl;
 
-import exe201.studymatebackend.dto.request.action.UpdateActionTokenRequest;
-import exe201.studymatebackend.dto.response.action.UpdateActionTokenResponse;
+import exe201.studymatebackend.dto.request.action.UpdateActionCoinRequest;
+import exe201.studymatebackend.dto.response.action.UpdateActionCoinResponse;
 import exe201.studymatebackend.exception.AppException;
 import exe201.studymatebackend.exception.ErrorCode;
 import exe201.studymatebackend.pojo.Action;
@@ -36,15 +36,15 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     @Transactional
-    public UpdateActionTokenResponse updateActionToken(Integer actionID, UpdateActionTokenRequest updateActionTokenRequest) {
+    public UpdateActionCoinResponse updateActionCoin(Integer actionID, UpdateActionCoinRequest updateActionCoinRequest) {
         if (!actionRepository.existsByActionID(actionID)) {
             throw new AppException(ErrorCode.ACTION_DOES_NOT_EXIST);
         }
         Action action = actionRepository.findByActionID(actionID);
-        action.setActionToken(updateActionTokenRequest.getActionToken());
-        return UpdateActionTokenResponse.builder()
+        action.setActionCoin(updateActionCoinRequest.getActionCoin());
+        return UpdateActionCoinResponse.builder()
                 .actionID(action.getActionID())
-                .actionToken(action.getActionToken())
+                .actionCoin(action.getActionCoin())
                 .build();
     }
 

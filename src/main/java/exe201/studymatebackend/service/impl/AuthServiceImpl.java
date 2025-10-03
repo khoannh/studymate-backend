@@ -13,6 +13,8 @@ import exe201.studymatebackend.repository.AccountRepository;
 import exe201.studymatebackend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,7 +44,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        } catch (BadCredentialsException e) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        } catch (DisabledException e) {
+            throw new AppException(ErrorCode.ACCOUNT_IS_INACTIVE);
+        }
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         Account account = (Account) authentication.getPrincipal();
         String jwtToken = jwtUtil.generateToken(account);
@@ -73,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
         newAccount.setEmail(registerRequest.getEmail());
         newAccount.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         newAccount.setRole(Role.USER);
-        newAccount.setToken(0);
+        newAccount.setCoin(10000);
         newAccount.setCreatedAt(LocalDateTime.now());
         newAccount.setUpdatedAt(LocalDateTime.now());
         newAccount.setIsActive(true);

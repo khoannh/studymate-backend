@@ -1,8 +1,8 @@
 package exe201.studymatebackend.controller;
 
-import exe201.studymatebackend.dto.request.action.UpdateActionTokenRequest;
+import exe201.studymatebackend.dto.request.action.UpdateActionCoinRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
-import exe201.studymatebackend.dto.response.action.UpdateActionTokenResponse;
+import exe201.studymatebackend.dto.response.action.UpdateActionCoinResponse;
 import exe201.studymatebackend.service.ActionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +30,9 @@ public class ActionController {
 
     @PutMapping("/action/{actionID}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ApiResponse<UpdateActionTokenResponse> updateActionToken(@RequestBody @Valid UpdateActionTokenRequest updateActionTokenRequest, @PathVariable Integer actionID) {
-        UpdateActionTokenResponse result = actionService.updateActionToken(actionID, updateActionTokenRequest);
-        return ApiResponse.<UpdateActionTokenResponse>builder()
+    public ApiResponse<UpdateActionCoinResponse> updateActionCoin(@RequestBody @Valid UpdateActionCoinRequest updateActionCoinRequest, @PathVariable Integer actionID) {
+        UpdateActionCoinResponse result = actionService.updateActionCoin(actionID, updateActionCoinRequest);
+        return ApiResponse.<UpdateActionCoinResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Action updated successfully")
                 .result(result)

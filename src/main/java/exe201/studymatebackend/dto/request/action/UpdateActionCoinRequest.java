@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateActionTokenRequest {
+public class UpdateActionCoinRequest {
 
-    @NotNull(message = "Action token cannot be null")
-    private int actionToken;
+    @NotNull(message = "Action coin cannot be null")
+    private int actionCoin;
 }

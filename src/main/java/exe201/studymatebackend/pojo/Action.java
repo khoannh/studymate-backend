@@ -19,10 +19,10 @@ public class Action {
     private String actionName;
 
     @Column(nullable = false)
-    private int actionToken;
+    private int actionCoin;
 
-    public Action(String actionName, int actionToken) {
+    public Action(String actionName, int actionCoin) {
         this.actionName = actionName;
-        this.actionToken = actionToken;
+        this.actionCoin = actionCoin;
     }
 }
