@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 import java.time.LocalDateTime;
 
 @Data
@@ -18,7 +17,7 @@ public class GetAllAccountResponse {
     private String username;
     private String email;
     private Role role;
-    private int token;
+    private int coin;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean isActive;

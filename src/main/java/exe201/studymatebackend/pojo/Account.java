@@ -36,7 +36,7 @@ public class Account implements UserDetails {
     private Role role;
 
     @Column(nullable = false)
-    private int token;
+    private int coin;
 
     @Column(nullable = true)
     private LocalDateTime createdAt;
@@ -53,12 +53,12 @@ public class Account implements UserDetails {
     public Account() {
     }
 
-    public Account(String email, String password, String username, Role role, int token, LocalDateTime createdAt, LocalDateTime updatedAt, Boolean isActive) {
+    public Account(String email, String password, String username, Role role, int coin, LocalDateTime createdAt, LocalDateTime updatedAt, Boolean isActive) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.role = role;
-        this.token = token;
+        this.coin = coin;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.isActive = isActive;

@@ -14,7 +14,7 @@ public class CreateNewActionRequest {
     @NotBlank(message = "Action name cannot be blank")
     private String actionName;
 
-    @NotNull(message = "Token cannot be null")
-    @PositiveOrZero(message = "Number of token cannot be negative")
-    private int actionToken;
+    @NotNull(message = "Coin cannot be null")
+    @PositiveOrZero(message = "Number of coin cannot be negative")
+    private int actionCoin;
 }
