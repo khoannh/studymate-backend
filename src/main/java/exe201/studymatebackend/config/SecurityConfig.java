@@ -29,10 +29,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/room-management/rooms").permitAll()
                         .requestMatchers("/login", "/register",
                                 "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
-                                "/webjars/**", "/actuator/**", "/h2-console/**", "/account-management/**", "/api/packages/**" ) .permitAll()
+                                "/webjars/**", "/actuator/**", "/h2-console/**", "/account-management/**", "/api/packages/**",
                                 "/webjars/**", "/actuator/**", "/h2-console/**", "/account-management/**").permitAll()
-                        .anyRequest().authenticated())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                        .anyRequest().authenticated()).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

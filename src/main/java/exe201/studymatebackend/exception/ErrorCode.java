@@ -18,8 +18,8 @@ public enum ErrorCode {
     OLD_PASSWORD_IS_WRONG(2004, "Old password is wrong", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD(2005, "Username or password is wrong", HttpStatus.BAD_REQUEST),
     ACCOUNT_IS_INACTIVE(2006, "Your account is inactive", HttpStatus.BAD_REQUEST),
-    FILE_UPLOAD_FAILED(2005, "File upload failed",HttpStatus.BAD_REQUEST)
-    ,FILE_NOT_FOUND(2006, "File not found",HttpStatus.BAD_REQUEST),
+    FILE_UPLOAD_FAILED(2007, "File upload failed",HttpStatus.BAD_REQUEST)
+    ,FILE_NOT_FOUND(2008, "File not found",HttpStatus.BAD_REQUEST),
     // Room
     NOT_ENOUGH_COIN(3000, "Not enough coin. Please buy for more", HttpStatus.BAD_REQUEST),
     ROOM_ALREADY_EXIST(3001, "Room already exist", HttpStatus.BAD_REQUEST),
