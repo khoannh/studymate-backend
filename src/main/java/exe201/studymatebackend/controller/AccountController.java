@@ -149,5 +149,15 @@ public class AccountController {
                 .result(result)
                 .build();
     }
+
+    @GetMapping("/accounts/current/coin")
+    public ApiResponse<GetCoinResponse> getCoin() {
+        GetCoinResponse result = accountService.getCoin();
+        return ApiResponse.<GetCoinResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Retrieved coin successfully")
+                .result(result)
+                .build();
+    }
 }
 

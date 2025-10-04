@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateNewActionResponse {
+public class UpdateActionCoinResponse {
     private Integer actionID;
-    private String actionName;
     private int actionCoin;
 }

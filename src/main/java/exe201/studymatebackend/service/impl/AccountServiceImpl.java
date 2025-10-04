@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
                             .username(account.getUsername())
                             .email(account.getEmail())
                             .role(account.getRole())
-                            .token(account.getToken())
+                            .coin(account.getCoin())
                             .createdAt(account.getCreatedAt())
                             .updatedAt(account.getUpdatedAt())
                             .isActive(account.getIsActive())
@@ -67,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
                         .username(account.getUsername())
                         .email(account.getEmail())
                         .role(account.getRole())
-                        .token(account.getToken())
+                        .coin(account.getCoin())
                         .createdAt(account.getCreatedAt())
                         .updatedAt(account.getUpdatedAt())
                         .isActive(account.getIsActive())
@@ -128,7 +128,7 @@ public class AccountServiceImpl implements AccountService {
                 .username(currentUser.getUsername())
                 .email(currentUser.getEmail())
                 .role(currentUser.getRole())
-                .token(currentUser.getToken())
+                .coin(currentUser.getCoin())
                 .createdAt(currentUser.getCreatedAt())
                 .updatedAt(currentUser.getUpdatedAt())
                 .isActive(currentUser.getIsActive())
@@ -252,6 +252,14 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
+    @Override
+    public GetCoinResponse getCoin() {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return GetCoinResponse.builder()
+                .coin(account.getCoin())
+                .build();
+    }
+
 
     // -------------------
     // Helper mapping methods
@@ -261,7 +269,7 @@ public class AccountServiceImpl implements AccountService {
                 .username(account.getUsername())
                 .email(account.getEmail())
                 .role(account.getRole())
-                .token(account.getToken())
+                .coin(account.getCoin())
                 .createdAt(account.getCreatedAt())
                 .updatedAt(account.getUpdatedAt())
                 .isActive(account.getIsActive())
@@ -274,10 +282,12 @@ public class AccountServiceImpl implements AccountService {
                 .username(account.getUsername())
                 .email(account.getEmail())
                 .role(account.getRole())
-                .token(account.getToken())
+                .coin(account.getCoin())
                 .createdAt(account.getCreatedAt())
                 .updatedAt(account.getUpdatedAt())
                 .isActive(account.getIsActive())
                 .build();
     }
+
+
 }
