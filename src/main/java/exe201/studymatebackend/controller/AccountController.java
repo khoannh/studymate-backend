@@ -71,12 +71,26 @@ public class AccountController {
                 .build();
     }
 
+    // Update current account
+    @PutMapping("/accounts/current")
+    public ApiResponse<UpdateAccountResponse> updateCurrentAccount(
+            @RequestBody UpdateAccountRequest request) {
+
+        UpdateAccountResponse result = accountService.updateCurrentAccount(request);
+
+        return ApiResponse.<UpdateAccountResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Current account updated successfully")
+                .result(result)
+                .build();
+    }
+
     // Renew current user's password
     @PutMapping("/accounts/current/renew-password")
-    public ApiResponse<Void> renewPassword(
+    public ApiResponse<Void> renewCurrentPassword(
             @RequestBody RenewPasswordRequest request) {
 
-        accountService.renewPassword(request);
+        accountService.renewCurrentPassword(request);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Password renewed successfully")
@@ -101,6 +115,16 @@ public class AccountController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"avatar.png\"")
                 .contentType(MediaType.IMAGE_PNG)
                 .body(image);
+    }
+    // Update current avatar
+    @PutMapping(value = "/accounts/current/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<AvatarResponse> updateCurrentAvatar(@RequestParam("file") MultipartFile file) {
+        AvatarResponse result = accountService.updateCurrentAvatar(file);
+        return ApiResponse.<AvatarResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Avatar updated successfully")
+                .result(result)
+                .build();
     }
 
 

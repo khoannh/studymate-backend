@@ -22,7 +22,11 @@ public interface AccountService {
     AvatarResponse uploadAvatar(MultipartFile file);
     byte[] getCurrentUserAvatar();
 
-    void renewPassword(RenewPasswordRequest request);
+    AvatarResponse updateCurrentAvatar(MultipartFile file);
+
+    UpdateAccountResponse updateCurrentAccount(UpdateAccountRequest request);
+
+    void renewCurrentPassword(RenewPasswordRequest request);
 
 
     void banAccount(Integer id);
