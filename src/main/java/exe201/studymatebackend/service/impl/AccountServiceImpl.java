@@ -16,8 +16,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -133,22 +136,109 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+
     @Override
     @Transactional
-    public void renewPassword(RenewPasswordRequest request) {
+    public UpdateAccountResponse updateCurrentAccount(UpdateAccountRequest request) {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer acID = account.getAccountID();
+
         Account currentUser = accountRepository.findById(acID)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_DOES_NOT_EXIST));
-        if (!currentUser.getPassword().equals(passwordEncoder.encode(request.getOldPassword()))) {
+
+        // cập nhật email (hoặc thêm field khác tuỳ nhu cầu)
+        currentUser.setEmail(request.getEmail());
+        currentUser.setUpdatedAt(LocalDateTime.now());
+
+        accountRepository.save(currentUser);
+
+        return UpdateAccountResponse.builder()
+                .accountID(currentUser.getAccountID())
+                .email(currentUser.getEmail())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public void renewCurrentPassword(RenewPasswordRequest request) {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer acID = account.getAccountID();
+
+        Account currentUser = accountRepository.findById(acID)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_DOES_NOT_EXIST));
+
+        // Check old password đúng không
+        if (!passwordEncoder.matches(request.getOldPassword(), currentUser.getPassword())) {
             throw new AppException(ErrorCode.OLD_PASSWORD_IS_WRONG);
         }
+
+        // Check confirm password có khớp không
         if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
             throw new AppException(ErrorCode.PASSWORD_DOES_NOT_MATCH);
         }
+
+        // Lưu password mới
         currentUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
         currentUser.setUpdatedAt(LocalDateTime.now());
+
         accountRepository.save(currentUser);
+    }
+    @Override
+    public AvatarResponse uploadAvatar(MultipartFile file) {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer acID = account.getAccountID();
+
+        Account currentUser = accountRepository.findById(acID)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_DOES_NOT_EXIST));
+
+        try {
+            currentUser.setAvatar(file.getBytes());
+        } catch (IOException e) {
+            throw new AppException(ErrorCode.FILE_UPLOAD_FAILED);
+        }
+        currentUser.setUpdatedAt(LocalDateTime.now());
+        accountRepository.save(currentUser);
+
+        return AvatarResponse.builder()
+                .accountID(currentUser.getAccountID())
+                .message("Avatar uploaded successfully")
+                .build();
+    }
+    @Override
+    @Transactional
+    public AvatarResponse updateCurrentAvatar(MultipartFile file) {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer acID = account.getAccountID();
+
+        Account currentUser = accountRepository.findById(acID)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_DOES_NOT_EXIST));
+
+        try {
+            currentUser.setAvatar(file.getBytes());
+        } catch (IOException e) {
+            throw new AppException(ErrorCode.FILE_UPLOAD_FAILED);
+        }
+
+        currentUser.setUpdatedAt(LocalDateTime.now());
+        accountRepository.save(currentUser);
+
+        return AvatarResponse.builder()
+                .accountID(currentUser.getAccountID())
+                .message("Avatar updated successfully")
+                .build();
+    }
+    @Override
+    public byte[] getCurrentUserAvatar() {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer acID = account.getAccountID();
+
+        Account currentUser = accountRepository.findById(acID)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_DOES_NOT_EXIST));
+
+        if (currentUser.getAvatar() == null) {
+            throw new AppException(ErrorCode.FILE_NOT_FOUND);
+        }
+        return currentUser.getAvatar();
     }
 
 

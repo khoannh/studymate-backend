@@ -35,8 +35,7 @@ public class RoomController {
                 .message("Joined room successfully")
                 .build();
     }
-
-git
+    
     @GetMapping("/rooms")
     public ApiResponse<GetRoomPageResponse> getRooms(
             @RequestParam(defaultValue = "0") int page,

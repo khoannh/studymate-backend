@@ -1,8 +1,10 @@
 package exe201.studymatebackend.service;
 
+
 import exe201.studymatebackend.dto.request.account.RenewPasswordRequest;
 import exe201.studymatebackend.dto.request.account.UpdateAccountRequest;
 import exe201.studymatebackend.dto.response.account.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,7 +19,14 @@ public interface AccountService {
 
     ViewAccountResponse viewCurrentAccount();
 
-    void renewPassword(RenewPasswordRequest request);
+    AvatarResponse uploadAvatar(MultipartFile file);
+    byte[] getCurrentUserAvatar();
+
+    AvatarResponse updateCurrentAvatar(MultipartFile file);
+
+    UpdateAccountResponse updateCurrentAccount(UpdateAccountRequest request);
+
+    void renewCurrentPassword(RenewPasswordRequest request);
 
     void banAccount(Integer id);
 
