@@ -1,5 +1,6 @@
 package exe201.studymatebackend.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import exe201.studymatebackend.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,6 +47,8 @@ public class Account implements UserDetails {
 
     @Column(nullable = false)
     private Boolean isActive;
+    @Column(name = "avatar", columnDefinition = "BYTEA")
+    private byte[] avatar;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AccountRoom> accountRoomList;
