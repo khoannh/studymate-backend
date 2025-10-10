@@ -7,6 +7,7 @@ import exe201.studymatebackend.dto.response.account.*;
 import exe201.studymatebackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping("/accounts")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ApiResponse<List<GetAllAccountResponse>> getAllAccounts() {
         List<GetAllAccountResponse> result = accountService.getAllAccount();
         return ApiResponse.<List<GetAllAccountResponse>>builder()
@@ -80,6 +82,7 @@ public class AccountController {
 
     // Ban account
     @PutMapping("/accounts/{id}/ban")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ApiResponse<Void> banAccount(@PathVariable Integer id) {
         accountService.banAccount(id);
         return ApiResponse.<Void>builder()

@@ -3,6 +3,7 @@ package exe201.studymatebackend.service.impl;
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
 import exe201.studymatebackend.dto.response.room.CreateRoomResponse;
 import exe201.studymatebackend.dto.response.room.GetAllRoomResponse;
+import exe201.studymatebackend.dto.response.room.GetRoomInfoResponse;
 import exe201.studymatebackend.dto.response.room.GetRoomPageResponse;
 import exe201.studymatebackend.enums.RoomRole;
 import exe201.studymatebackend.exception.AppException;
@@ -172,6 +173,25 @@ public class RoomServiceImpl implements RoomService {
                 .totalElements(rooms.getTotalElements())
                 .totalPages(rooms.getTotalPages())
                 .isLastPage(rooms.isLast())
+                .build();
+    }
+
+    @Override
+    public GetRoomInfoResponse getRoomInfo(int roomID) {
+        Room room = roomRepository.findByRoomID(roomID);
+        if (room == null) {
+            throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
+        }
+        return GetRoomInfoResponse.builder()
+                .roomID(room.getRoomID())
+                .roomName(room.getRoomName())
+                .roomDescription(room.getRoomDescription())
+                .topic(room.getTopic())
+                .createdAt(room.getCreatedAt())
+                .isActive(room.isActive())
+                .maxNumberOfMembers(room.getMaxNumberOfMembers())
+                .isPublic(room.isPublic())
+                .numberOfMembers(room.getNumberOfMembers())
                 .build();
     }
 }

@@ -23,6 +23,7 @@ public enum ErrorCode {
     ROOM_ALREADY_EXIST(3001, "Room already exist", HttpStatus.BAD_REQUEST),
     ACCOUNT_ALREADY_JOINED_ROOM(3002, "Account already joined this room", HttpStatus.BAD_REQUEST),
     ROOM_ALREADY_FULL(3003, "Room already full", HttpStatus.BAD_REQUEST),
+    ROOM_DOES_NOT_EXIST(3004, "Room does not exist", HttpStatus.BAD_REQUEST),
     // Action
     ACTION_ALREADY_EXIST(4000, "Action already exist", HttpStatus.BAD_REQUEST),
     ACTION_DOES_NOT_EXIST(4001, "Action does not exist", HttpStatus.BAD_REQUEST),
