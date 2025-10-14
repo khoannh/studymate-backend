@@ -14,4 +14,5 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
     Room findByRoomID(Integer roomID);
 
     Page<Room> findAll(Pageable pageable);
+
 }
