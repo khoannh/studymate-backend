@@ -1,10 +1,7 @@
 package exe201.studymatebackend.service.impl;
 
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
-import exe201.studymatebackend.dto.response.room.CreateRoomResponse;
-import exe201.studymatebackend.dto.response.room.GetAllRoomResponse;
-import exe201.studymatebackend.dto.response.room.GetRoomInfoResponse;
-import exe201.studymatebackend.dto.response.room.GetRoomPageResponse;
+import exe201.studymatebackend.dto.response.room.*;
 import exe201.studymatebackend.enums.RoomRole;
 import exe201.studymatebackend.exception.AppException;
 import exe201.studymatebackend.exception.ErrorCode;
@@ -193,5 +190,34 @@ public class RoomServiceImpl implements RoomService {
                 .isPublic(room.isPublic())
                 .numberOfMembers(room.getNumberOfMembers())
                 .build();
+    }
+
+    @Override
+    public GetMyRoomResponse getMyRoom(int page, int size) {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "room.createdAt"));
+        Page<AccountRoom> accountRooms = accountRoomRepository.findAllByAccount(account, pageable);
+        List<GetMyRoomResponse.RoomInfo> content = accountRooms.getContent().stream().map(accountRoom -> {
+            Room room = accountRoom.getRoom();
+            return GetMyRoomResponse.RoomInfo.builder()
+                    .roomID(room.getRoomID())
+                    .roomName(room.getRoomName())
+                    .build();
+        }).toList();
+        return GetMyRoomResponse.builder()
+                .content(content)
+                .pageNumber(accountRooms.getNumber())
+                .pageSize(accountRooms.getSize())
+                .totalElements(accountRooms.getTotalElements())
+                .totalPages(accountRooms.getTotalPages())
+                .isLastPage(accountRooms.isLast())
+                .build();
+    }
+
+    @Override
+    public void leaveRoom(Integer roomID) {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer accountID = account.getAccountID();
+        
     }
 }

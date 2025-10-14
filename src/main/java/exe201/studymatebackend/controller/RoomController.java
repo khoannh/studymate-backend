@@ -3,6 +3,7 @@ package exe201.studymatebackend.controller;
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
 import exe201.studymatebackend.dto.response.room.CreateRoomResponse;
+import exe201.studymatebackend.dto.response.room.GetMyRoomResponse;
 import exe201.studymatebackend.dto.response.room.GetRoomInfoResponse;
 import exe201.studymatebackend.dto.response.room.GetRoomPageResponse;
 import exe201.studymatebackend.service.RoomService;
@@ -35,7 +36,7 @@ public class RoomController {
                 .message("Joined room successfully")
                 .build();
     }
-    
+
     @GetMapping("/rooms")
     public ApiResponse<GetRoomPageResponse> getRooms(
             @RequestParam(defaultValue = "0") int page,
@@ -55,6 +56,19 @@ public class RoomController {
         return ApiResponse.<GetRoomInfoResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Retrieved room info successfully")
+                .result(result)
+                .build();
+    }
+
+    @GetMapping("/my-rooms")
+    public ApiResponse<GetMyRoomResponse> getMyRooms(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size
+    ) {
+        GetMyRoomResponse result = roomService.getMyRoom(page, size);
+        return ApiResponse.<GetMyRoomResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Retrieved my rooms successfully")
                 .result(result)
                 .build();
     }
