@@ -73,5 +73,14 @@ public class RoomController {
                 .build();
     }
 
+    @PostMapping("/room/{roomID}/leave")
+    public ApiResponse<Void> leaveRoom(@PathVariable Integer roomID) {
+        roomService.leaveRoom(roomID);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Left room successfully")
+                .build();
+    }
+
 
 }
