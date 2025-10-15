@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -110,13 +111,41 @@ public class RoomServiceImpl implements RoomService {
         Integer accountID = account.getAccountID();
         Account member = accountRepository.findByAccountID(accountID);
         Room room = roomRepository.findByRoomID(roomID);
-
-        if (accountRoomRepository.findAccountRoomByAccountAndRoom(member, room) != null) {
-            throw new AppException(ErrorCode.ACCOUNT_ALREADY_JOINED_ROOM);
+        if (!room.isActive()) {
+            throw new AppException(ErrorCode.ROOM_IS_INACTIVE);
         }
         if (room.getNumberOfMembers() >= room.getMaxNumberOfMembers()) {
             throw new AppException(ErrorCode.ROOM_ALREADY_FULL);
         }
+        // join lại sau khi đã rời
+        Optional<AccountRoom> existingAccountRoomOpt = accountRoomRepository.findByAccountAndRoom(member, room);
+        if (existingAccountRoomOpt.isPresent()) {
+            AccountRoom existingAccountRoom = existingAccountRoomOpt.get();
+            if (existingAccountRoom.getLeftAt() == null) {
+                throw new AppException(ErrorCode.ACCOUNT_ALREADY_JOINED_ROOM);
+            } else {
+                existingAccountRoom.setLeftAt(null);
+                existingAccountRoom.setJoinedAt(LocalDateTime.now());
+                existingAccountRoom.setRoomRole(RoomRole.MEMBER);
+                accountRoomRepository.save(existingAccountRoom);
+                room.setNumberOfMembers(room.getNumberOfMembers() + 1);
+                roomRepository.save(room);
+                int coin = member.getCoin();
+                if (actionRepository.findByActionName("Join room") == null) {
+                    throw new AppException(ErrorCode.ACTION_DOES_NOT_EXIST);
+                }
+                int cost = actionRepository.findByActionName("Join room").getActionCoin();
+                if (coin < cost) {
+                    throw new AppException(ErrorCode.NOT_ENOUGH_COIN);
+                } else {
+                    coin = coin - cost;
+                }
+                member.setCoin(coin);
+                return;
+            }
+
+        }
+        // join lần đầu tiên
         AccountRoom accountRoom = new AccountRoom();
         accountRoom.setAccount(member);
         accountRoom.setRoom(room);
@@ -158,6 +187,7 @@ public class RoomServiceImpl implements RoomService {
                 .roomDescription(room.getRoomDescription())
                 .topic(room.getTopic())
                 .createdAt(room.getCreatedAt())
+//                .ownerName(accountRepository.findByAccountID(accountRoomRepository.findAccountIdByRoomAndRoomRole(room, RoomRole.OWNER)).getUsername())
                 .isActive(room.isActive())
                 .maxNumberOfMembers(room.getMaxNumberOfMembers())
                 .isPublic(room.isPublic())
@@ -196,7 +226,7 @@ public class RoomServiceImpl implements RoomService {
     public GetMyRoomResponse getMyRoom(int page, int size) {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "room.createdAt"));
-        Page<AccountRoom> accountRooms = accountRoomRepository.findAllByAccount(account, pageable);
+        Page<AccountRoom> accountRooms = accountRoomRepository.findAllByAccountAndLeftAtIsNull(account, pageable);
         List<GetMyRoomResponse.RoomInfo> content = accountRooms.getContent().stream().map(accountRoom -> {
             Room room = accountRoom.getRoom();
             return GetMyRoomResponse.RoomInfo.builder()
@@ -215,9 +245,36 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    @Transactional
     public void leaveRoom(Integer roomID) {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer accountID = account.getAccountID();
-        
+        Room room = roomRepository.findByRoomID(roomID);
+        if (room == null) {
+            throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
+        }
+        Account member = accountRepository.findByAccountID(accountID);
+        AccountRoom accountRoom = accountRoomRepository.findAccountRoomByAccountAndRoomAndLeftAtIsNull(member, room);
+        if (accountRoom == null) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_IN_ROOM);
+        }
+        if (accountRoom.getRoomRole() == RoomRole.OWNER) {
+            if (room.getNumberOfMembers() == 1) {
+                accountRoom.setLeftAt(LocalDateTime.now());
+                accountRoomRepository.save(accountRoom);
+                room.setActive(false);
+                room.setNumberOfMembers(0);
+                roomRepository.save(room);
+                return;
+            }
+            throw new AppException(ErrorCode.OWNER_CANNOT_LEAVE_ROOM);
+        }
+        accountRoom.setLeftAt(LocalDateTime.now());
+        accountRoomRepository.save(accountRoom);
+        room.setNumberOfMembers(room.getNumberOfMembers() - 1);
+        if (room.getNumberOfMembers() == 0) {
+            room.setActive(false);
+        }
+        roomRepository.save(room);
     }
 }
