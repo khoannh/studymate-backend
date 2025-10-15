@@ -26,10 +26,14 @@ public enum ErrorCode {
     ACCOUNT_ALREADY_JOINED_ROOM(3002, "Account already joined this room", HttpStatus.BAD_REQUEST),
     ROOM_ALREADY_FULL(3003, "Room already full", HttpStatus.BAD_REQUEST),
     ROOM_DOES_NOT_EXIST(3004, "Room does not exist", HttpStatus.BAD_REQUEST),
+    ACCOUNT_NOT_IN_ROOM(3005, "Account not in this room", HttpStatus.BAD_REQUEST),
+    OWNER_CANNOT_LEAVE_ROOM(3006, "Owner cannot leave the room, you must transfer permissions to someone first ", HttpStatus.BAD_REQUEST),
+    ROOM_IS_INACTIVE(3007, "This room is inactive", HttpStatus.BAD_REQUEST),
     // Action
     ACTION_ALREADY_EXIST(4000, "Action already exist", HttpStatus.BAD_REQUEST),
     ACTION_DOES_NOT_EXIST(4001, "Action does not exist", HttpStatus.BAD_REQUEST),
     // Package
+
     PACKAGE_ID_NOT_FOUND(5001, "Package id not found", HttpStatus.BAD_REQUEST),
     //topic
     TOPIC_DOES_NOT_EXIST(6001, "Topic not found", HttpStatus.BAD_REQUEST)
