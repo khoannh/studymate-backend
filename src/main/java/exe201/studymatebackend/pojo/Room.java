@@ -21,8 +21,9 @@ public class Room {
     @Column(nullable = true)
     private String roomDescription;
 
-    @Column(nullable = false)
-    private String topic;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "topic_id", nullable = false)
+    private Topic topic;
 
     @Column(nullable = false)
     private boolean isPublic;

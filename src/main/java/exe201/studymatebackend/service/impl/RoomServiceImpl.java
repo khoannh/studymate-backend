@@ -11,10 +11,8 @@ import exe201.studymatebackend.exception.ErrorCode;
 import exe201.studymatebackend.pojo.Account;
 import exe201.studymatebackend.pojo.AccountRoom;
 import exe201.studymatebackend.pojo.Room;
-import exe201.studymatebackend.repository.AccountRepository;
-import exe201.studymatebackend.repository.AccountRoomRepository;
-import exe201.studymatebackend.repository.ActionRepository;
-import exe201.studymatebackend.repository.RoomRepository;
+import exe201.studymatebackend.pojo.Topic;
+import exe201.studymatebackend.repository.*;
 import exe201.studymatebackend.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,6 +41,8 @@ public class RoomServiceImpl implements RoomService {
 
     @Autowired
     private ActionRepository actionRepository;
+    @Autowired
+    private TopicRepository topicRepository;
 
     @Transactional
     @Override
@@ -70,7 +70,11 @@ public class RoomServiceImpl implements RoomService {
         room.setRoomName(request.getRoomName());
         room.setRoomDescription(request.getRoomDescription());
         room.setPublic(request.isPublic());
-        room.setTopic(request.getTopic());
+        Topic topic = topicRepository.findAll().stream()
+                .filter(t -> t.getTopicName().equalsIgnoreCase(request.getTopic()))
+                .findFirst()
+                .orElseThrow(() -> new AppException(ErrorCode.TOPIC_DOES_NOT_EXIST));
+        room.setTopic(topic);
         room.setCreatedAt(LocalDateTime.now());
         room.setActive(true);
         room.setMaxNumberOfMembers(request.getMaxNumberOfMembers());
@@ -98,7 +102,7 @@ public class RoomServiceImpl implements RoomService {
                 .roomID(room.getRoomID())
                 .roomName(room.getRoomName())
                 .roomDescription(room.getRoomDescription())
-                .topic(room.getTopic())
+                .topic(room.getTopic().getTopicName())
                 .createdAt(room.getCreatedAt())
                 .isActive(room.isActive())
                 .maxNumberOfMembers(room.getMaxNumberOfMembers())
@@ -159,7 +163,7 @@ public class RoomServiceImpl implements RoomService {
                 .roomID(room.getRoomID())
                 .roomName(room.getRoomName())
                 .roomDescription(room.getRoomDescription())
-                .topic(room.getTopic())
+                .topic(room.getTopic().getTopicName())
                 .createdAt(room.getCreatedAt())
                 .isActive(room.isActive())
                 .maxNumberOfMembers(room.getMaxNumberOfMembers())
@@ -186,7 +190,7 @@ public class RoomServiceImpl implements RoomService {
                 .roomID(room.getRoomID())
                 .roomName(room.getRoomName())
                 .roomDescription(room.getRoomDescription())
-                .topic(room.getTopic())
+                .topic(room.getTopic().getTopicName())
                 .createdAt(room.getCreatedAt())
                 .isActive(room.isActive())
                 .maxNumberOfMembers(room.getMaxNumberOfMembers())
