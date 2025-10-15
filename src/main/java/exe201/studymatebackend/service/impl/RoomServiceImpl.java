@@ -68,10 +68,10 @@ public class RoomServiceImpl implements RoomService {
         room.setRoomName(request.getRoomName());
         room.setRoomDescription(request.getRoomDescription());
         room.setPublic(request.isPublic());
-        Topic topic = topicRepository.findAll().stream()
-                .filter(t -> t.getTopicName().equalsIgnoreCase(request.getTopic()))
-                .findFirst()
-                .orElseThrow(() -> new AppException(ErrorCode.TOPIC_DOES_NOT_EXIST));
+        Topic topic = topicRepository.findByTopicName(request.getTopic());
+        if (topic == null) {
+            throw new AppException(ErrorCode.TOPIC_DOES_NOT_EXIST);
+        }
         room.setTopic(topic);
         room.setCreatedAt(LocalDateTime.now());
         room.setActive(true);

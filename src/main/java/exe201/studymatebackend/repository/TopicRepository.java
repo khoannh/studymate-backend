@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface TopicRepository extends JpaRepository<Topic, Integer> {
     boolean existsByTopicName(String topicName);
 
+    Topic findByTopicName(String topicName);
+
 }
