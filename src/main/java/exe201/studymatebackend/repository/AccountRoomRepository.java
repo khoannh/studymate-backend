@@ -19,5 +19,5 @@ public interface AccountRoomRepository extends JpaRepository<AccountRoom, Intege
 
     Page<AccountRoom> findAllByAccountAndLeftAtIsNull(Account account, Pageable pageable);
 
-    Integer findAccountIdByRoomAndRoomRole(Room room, RoomRole role);
+    AccountRoom findByRoomAndRoomRole(Room room, RoomRole role);
 }
