@@ -28,7 +28,7 @@ public interface AccountService {
 
     void renewCurrentPassword(RenewPasswordRequest request);
 
-    void banAccount(Integer id);
+    void banAccount(String username);
 
     GetCoinResponse getCoin();
 }

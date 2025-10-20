@@ -128,16 +128,15 @@ public class AccountController {
     }
 
 
-    // Ban account
-    @PutMapping("/accounts/{id}/ban")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ApiResponse<Void> banAccount(@PathVariable Integer id) {
-        accountService.banAccount(id);
+    @PutMapping("/accounts/{username}/ban")
+    public ApiResponse<Void> banAccount(@PathVariable String username) {
+        accountService.banAccount(username);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Account banned successfully")
                 .build();
     }
+
 
     @GetMapping("/account")
     public ApiResponse<GetAccountPageResponse> getAccounts(
