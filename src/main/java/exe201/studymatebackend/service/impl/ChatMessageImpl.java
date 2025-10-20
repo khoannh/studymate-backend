@@ -18,6 +18,10 @@ import exe201.studymatebackend.service.ChatMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -176,13 +180,17 @@ public class ChatMessageImpl implements ChatMessageService {
     }
 
     @Override
-    public GetAllMessageOfRoomResponse getAllMessageOfRoom(Integer roomID) {
+    public GetAllMessageOfRoomResponse getAllMessageOfRoom(Integer roomID, int page, int size) {
         Room room = roomRepository.findByRoomID(roomID);
         if (room == null) {
             throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
         }
-        List<ChatMessage> messages = chatMessageRepository.findByRoomOrderBySentAtAsc(room);
-        List<GetAllMessageOfRoomResponse.MessageResponse> messageResponses = messages.stream().map(msg -> GetAllMessageOfRoomResponse.MessageResponse.builder()
+        
+        // Tạo Pageable với sắp xếp theo thời gian gửi giảm dần (tin nhắn mới nhất trước)
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "sentAt"));
+        Page<ChatMessage> messagePage = chatMessageRepository.findByRoom(room, pageable);
+        
+        List<GetAllMessageOfRoomResponse.MessageResponse> messageResponses = messagePage.getContent().stream().map(msg -> GetAllMessageOfRoomResponse.MessageResponse.builder()
                 .messageID(msg.getMessageID())
                 .content(msg.getContent())
                 .accountID(msg.getAccount().getAccountID())
@@ -190,8 +198,14 @@ public class ChatMessageImpl implements ChatMessageService {
                 .messageType(msg.getMessageType())
                 .sentAt(msg.getSentAt())
                 .build()).toList();
+                
         return GetAllMessageOfRoomResponse.builder()
                 .roomID(roomID)
+                .pageNumber(messagePage.getNumber())
+                .pageSize(messagePage.getSize())
+                .totalElements(messagePage.getTotalElements())
+                .totalPages(messagePage.getTotalPages())
+                .isLastPage(messagePage.isLast())
                 .messages(messageResponses)
                 .build();
     }

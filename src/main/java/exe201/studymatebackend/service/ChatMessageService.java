@@ -15,5 +15,5 @@ public interface ChatMessageService {
     // Method mới sử dụng Account trực tiếp
     SendMessageResponse sendMessageWithAccount(SendMessageRequest request, Account account);
 
-    GetAllMessageOfRoomResponse getAllMessageOfRoom(Integer roomID);
+    GetAllMessageOfRoomResponse getAllMessageOfRoom(Integer roomID, int page, int size);
 }
