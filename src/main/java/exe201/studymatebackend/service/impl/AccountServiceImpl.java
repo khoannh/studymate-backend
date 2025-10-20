@@ -244,9 +244,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public void banAccount(Integer id) {
-        Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_DOES_NOT_EXIST));
+    public void banAccount(String username) {
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) {
+            throw new AppException(ErrorCode.USER_DOES_NOT_EXIST);
+        }
+
         account.setIsActive(false);
         account.setUpdatedAt(LocalDateTime.now());
         accountRepository.save(account);

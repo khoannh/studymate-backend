@@ -36,7 +36,9 @@ public enum ErrorCode {
 
     PACKAGE_ID_NOT_FOUND(5001, "Package id not found", HttpStatus.BAD_REQUEST),
     //topic
-    TOPIC_DOES_NOT_EXIST(6001, "Topic not found", HttpStatus.BAD_REQUEST)
+    TOPIC_DOES_NOT_EXIST(6001, "Topic not found", HttpStatus.BAD_REQUEST),
+    //report
+    REPORT_NOT_FOUND(7001, "Report not found", HttpStatus.BAD_REQUEST)
     ;
     private int detailCode;
     private String detailMessage;
