@@ -213,12 +213,14 @@ public class RoomServiceImpl implements RoomService {
         if (room == null) {
             throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
         }
+        AccountRoom owner = accountRoomRepository.findByRoomAndRoomRole(room, RoomRole.OWNER);
         return GetRoomInfoResponse.builder()
                 .roomID(room.getRoomID())
                 .roomName(room.getRoomName())
                 .roomDescription(room.getRoomDescription())
                 .topic(room.getTopic().getTopicName())
                 .createdAt(room.getCreatedAt())
+                .ownerName(owner.getAccount().getUsername())
                 .isActive(room.isActive())
                 .maxNumberOfMembers(room.getMaxNumberOfMembers())
                 .isPublic(room.isPublic())

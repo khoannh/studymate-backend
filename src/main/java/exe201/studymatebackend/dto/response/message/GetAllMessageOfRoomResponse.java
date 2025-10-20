@@ -15,6 +15,11 @@ import java.util.List;
 @Builder
 public class GetAllMessageOfRoomResponse {
     private Integer roomID;
+    private int pageNumber;
+    private int pageSize;
+    private long totalElements;
+    private int totalPages;
+    private boolean isLastPage;
     private List<MessageResponse> messages;
 
     @Data
