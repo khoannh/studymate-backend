@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/register",
                                 "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
                                 "/webjars/**", "/actuator/**", "/h2-console/**", "/account-management/**", "/api/packages/**",
-                                "/webjars/**", "/actuator/**", "/h2-console/**", "/account-management/**").permitAll()
+                                "/webjars/**", "/actuator/**", "/h2-console/**", "/account-management/**", "/ws/**").permitAll()
                         .anyRequest().authenticated()).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
