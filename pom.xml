@@ -91,6 +91,14 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
+        <!-- Firebase Admin SDK -->
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>9.3.0</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
         <dependency>
             <groupId>org.springdoc</groupId>

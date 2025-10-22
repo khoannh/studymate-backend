@@ -18,14 +18,13 @@ public enum ErrorCode {
     OLD_PASSWORD_IS_WRONG(2004, "Old password is wrong", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD(2005, "Username or password is wrong", HttpStatus.BAD_REQUEST),
     ACCOUNT_IS_INACTIVE(2006, "Your account is inactive", HttpStatus.BAD_REQUEST),
-    FILE_UPLOAD_FAILED(2007, "File upload failed",HttpStatus.BAD_REQUEST)
-    ,FILE_NOT_FOUND(2008, "File not found",HttpStatus.BAD_REQUEST),
+    FILE_UPLOAD_FAILED(2007, "File upload failed", HttpStatus.BAD_REQUEST), FILE_NOT_FOUND(2008, "File not found", HttpStatus.BAD_REQUEST),
     // Room
     NOT_ENOUGH_COIN(3000, "Not enough coin. Please buy for more", HttpStatus.BAD_REQUEST),
     ROOM_ALREADY_EXIST(3001, "Room already exist", HttpStatus.BAD_REQUEST),
     ACCOUNT_ALREADY_JOINED_ROOM(3002, "Account already joined this room", HttpStatus.BAD_REQUEST),
     ROOM_ALREADY_FULL(3003, "Room already full", HttpStatus.BAD_REQUEST),
-    ROOM_DOES_NOT_EXIST(3004, "Room does not exist", HttpStatus.BAD_REQUEST),
+    ROOM_DOES_NOT_EXIST(3004, "Phòng học không tồn tại", HttpStatus.BAD_REQUEST),
     ACCOUNT_NOT_IN_ROOM(3005, "Account not in this room", HttpStatus.BAD_REQUEST),
     OWNER_CANNOT_LEAVE_ROOM(3006, "Owner cannot leave the room, you must transfer permissions to someone first ", HttpStatus.BAD_REQUEST),
     ROOM_IS_INACTIVE(3007, "This room is inactive", HttpStatus.BAD_REQUEST),
@@ -38,7 +37,14 @@ public enum ErrorCode {
     //topic
     TOPIC_DOES_NOT_EXIST(6001, "Topic not found", HttpStatus.BAD_REQUEST),
     //report
-    REPORT_NOT_FOUND(7001, "Report not found", HttpStatus.BAD_REQUEST)
+    REPORT_NOT_FOUND(7001, "Report not found", HttpStatus.BAD_REQUEST),
+
+
+    //Document
+    DOCUMENT_NAME_ALREADY_EXISTS(8001, "Tên tài liệu đã tồn tại", HttpStatus.BAD_REQUEST),
+    DOCUMENT_URL_ALREADY_EXISTS(8002, "Đường dẫn tài liệu đã tồn tại", HttpStatus.BAD_REQUEST),
+    DOCUMENT_NOT_FOUND(8003, "Không tìm thấy tài liệu nào", HttpStatus.BAD_REQUEST),
+
     ;
     private int detailCode;
     private String detailMessage;
