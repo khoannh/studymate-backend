@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SendMessageRequest {
 
-    @NotBlank(message = "Content must not be blank")
+    @NotBlank(message = "Nội dung tin nhắn không được để trống")
     private String content;
 
-    @NotNull(message = "Room ID must not be null")
+    @NotNull(message = "Phòng học không được để trống")
     private Integer roomID;
 }

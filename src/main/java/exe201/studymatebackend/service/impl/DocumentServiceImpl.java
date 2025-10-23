@@ -51,12 +51,12 @@ public class DocumentServiceImpl implements DocumentService {
         if (documentRepository.findByDocumentName(request.getDocumentName()) != null) {
             throw new AppException(ErrorCode.DOCUMENT_NAME_ALREADY_EXISTS);
         }
-        if (documentRepository.findByDocumentURl(request.getDocumentURl()) != null) {
+        if (documentRepository.findByDocumentURL(request.getDocumentURL()) != null) {
             throw new AppException(ErrorCode.DOCUMENT_URL_ALREADY_EXISTS);
         }
         Document newDocument = new Document();
         newDocument.setDocumentName(request.getDocumentName());
-        newDocument.setDocumentURl(request.getDocumentURl());
+        newDocument.setDocumentURL(request.getDocumentURL());
         newDocument.setRoom(room);
         newDocument.setUploader(uploader.getUsername());
         newDocument.setDescription(request.getDescription());
@@ -64,7 +64,7 @@ public class DocumentServiceImpl implements DocumentService {
         documentRepository.save(newDocument);
         return UploadDocumentResponse.builder()
                 .documentID(newDocument.getDocumentID())
-                .documentURl(newDocument.getDocumentURl())
+                .documentURL(newDocument.getDocumentURL())
                 .documentName(newDocument.getDocumentName())
                 .roomID(newDocument.getRoom().getRoomID())
                 .description(newDocument.getDescription())
@@ -79,7 +79,7 @@ public class DocumentServiceImpl implements DocumentService {
         if (room == null) {
             throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
         }
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "uploadedAt"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "uploadedAt"));
         Page<Document> documentPage = documentRepository.findByRoom(room, pageable);
         if (documentPage == null) {
             throw new AppException(ErrorCode.DOCUMENT_NOT_FOUND);
@@ -87,7 +87,7 @@ public class DocumentServiceImpl implements DocumentService {
         List<GetAllDocumentResponse.DocumentResponse> documentResponses = documentPage.getContent().stream().map(doc -> GetAllDocumentResponse.DocumentResponse.builder()
                 .documentID(doc.getDocumentID())
                 .documentName(doc.getDocumentName())
-                .documentURl(doc.getDocumentURl())
+                .documentURL(doc.getDocumentURL())
                 .description(doc.getDescription())
                 .uploader(doc.getUploader())
                 .uploadedAt(doc.getUploadedAt())
@@ -116,11 +116,11 @@ public class DocumentServiceImpl implements DocumentService {
             }
             document.setDocumentName(request.getDocumentName());
         }
-        if (!document.getDocumentURl().equals(request.getDocumentURL())) {
-            if (documentRepository.findByDocumentURl(request.getDocumentURL()) != null) {
+        if (!document.getDocumentURL().equals(request.getDocumentURL())) {
+            if (documentRepository.findByDocumentURL(request.getDocumentURL()) != null) {
                 throw new AppException(ErrorCode.DOCUMENT_URL_ALREADY_EXISTS);
             }
-            document.setDocumentURl(request.getDocumentURL());
+            document.setDocumentURL(request.getDocumentURL());
         }
 
         if (request.getDescription() != null) {
@@ -130,7 +130,7 @@ public class DocumentServiceImpl implements DocumentService {
         return UpdateDocumentResponse.builder()
                 .documentID(document.getDocumentID())
                 .documentName(document.getDocumentName())
-                .documentURL(document.getDocumentURl())
+                .documentURL(document.getDocumentURL())
                 .description(document.getDescription())
                 .build();
     }

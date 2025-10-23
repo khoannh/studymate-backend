@@ -28,7 +28,7 @@ public class GetAllDocumentResponse {
     public static class DocumentResponse {
         private Integer documentID;
         private String documentName;
-        private String documentURl;
+        private String documentURL;
         private String description;
         private String uploader;
         private LocalDateTime uploadedAt;

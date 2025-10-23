@@ -13,18 +13,18 @@ public class CreateRoomRequest {
 //    @NotNull(message = "AccountID cannot be null")
 //    private Integer accountID;
 
-    @NotBlank(message = "Room name cannot be blank")
+    @NotBlank(message = "Tên phòng không được để trống")
     private String roomName;
 
     private String roomDescription;
 
-    @NotNull(message = "Topic cannot be null")
+    @NotNull(message = "Chủ đề không được để trống")
     private String topic;
 
-    @NotNull(message = "Privacy cannot be null")
+    @NotNull(message = "Quyền riêng tư không được để trống")
     private boolean isPublic;
 
-    @NotNull(message = "Max number of members cannot be null ")
+    @NotNull(message = "Số lượng thành viên tối đa không được để trống")
     private int maxNumberOfMembers;
 
 

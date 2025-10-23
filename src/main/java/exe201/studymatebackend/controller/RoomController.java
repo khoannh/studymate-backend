@@ -2,14 +2,13 @@ package exe201.studymatebackend.controller;
 
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
-import exe201.studymatebackend.dto.response.room.CreateRoomResponse;
-import exe201.studymatebackend.dto.response.room.GetMyRoomResponse;
-import exe201.studymatebackend.dto.response.room.GetRoomInfoResponse;
-import exe201.studymatebackend.dto.response.room.GetRoomPageResponse;
+import exe201.studymatebackend.dto.response.room.*;
 import exe201.studymatebackend.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/room-management")
@@ -23,7 +22,7 @@ public class RoomController {
         CreateRoomResponse result = roomService.createRoom(createRoomRequest);
         return ApiResponse.<CreateRoomResponse>builder()
                 .code(HttpStatus.CREATED.value())
-                .message("Room created successfully")
+                .message("Tạo phòng thành công")
                 .result(result)
                 .build();
     }
@@ -33,7 +32,7 @@ public class RoomController {
         roomService.joinRoom(roomID);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
-                .message("Joined room successfully")
+                .message("Tham gia phòng thành công")
                 .build();
     }
 
@@ -45,7 +44,7 @@ public class RoomController {
         GetRoomPageResponse result = roomService.getAllRoom(page, size);
         return ApiResponse.<GetRoomPageResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("Retrieved all rooms successfully")
+                .message("Lấy danh sách phòng thành công")
                 .result(result)
                 .build();
     }
@@ -55,7 +54,7 @@ public class RoomController {
         GetRoomInfoResponse result = roomService.getRoomInfo(roomID);
         return ApiResponse.<GetRoomInfoResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("Retrieved room info successfully")
+                .message("Lấy thông tin phòng thành công")
                 .result(result)
                 .build();
     }
@@ -68,7 +67,7 @@ public class RoomController {
         GetMyRoomResponse result = roomService.getMyRoom(page, size);
         return ApiResponse.<GetMyRoomResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("Retrieved my rooms successfully")
+                .message("Lấy danh sách phòng của tôi thành công")
                 .result(result)
                 .build();
     }
@@ -78,9 +77,18 @@ public class RoomController {
         roomService.leaveRoom(roomID);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
-                .message("Left room successfully")
+                .message("Rời phòng thành công")
                 .build();
     }
 
+    @GetMapping("/room/{roomID}/members")
+    public ApiResponse<List<GetAllMembersResponse>> getMembers(@PathVariable Integer roomID) {
+        List<GetAllMembersResponse> result = roomService.getMembers(roomID);
+        return ApiResponse.<List<GetAllMembersResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("Lấy danh sách thành viên thành công")
+                .result(result)
+                .build();
+    }
 
 }

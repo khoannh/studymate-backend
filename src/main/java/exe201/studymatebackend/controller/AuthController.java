@@ -24,7 +24,7 @@ public class AuthController {
         LoginResponse result = authService.login(loginRequest);
         return ApiResponse.<LoginResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("Login successfully")
+                .message("Đăng nhập thành công")
                 .result(result)
                 .build();
 
@@ -35,7 +35,7 @@ public class AuthController {
         RegisterResponse result = authService.register(registerRequest);
         return ApiResponse.<RegisterResponse>builder()
                 .code(HttpStatus.CREATED.value())
-                .message("Successfully registered")
+                .message("Đăng ký thành công")
                 .result(result)
                 .build();
     }

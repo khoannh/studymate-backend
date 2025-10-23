@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     Document findByDocumentName(String documentName);
 
-    Document findByDocumentURl(String documentURl);
+    Document findByDocumentURL(String documentURl);
 
     Document findByDocumentID(Integer documentID);
 

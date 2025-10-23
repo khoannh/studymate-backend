@@ -4,11 +4,7 @@ import exe201.studymatebackend.dto.response.ApiResponse;
 import exe201.studymatebackend.dto.response.message.GetAllMessageOfRoomResponse;
 import exe201.studymatebackend.service.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/message-management")
@@ -35,7 +31,7 @@ public class ChatMessageController {
         GetAllMessageOfRoomResponse result = chatMessageService.getAllMessageOfRoom(roomID, page, size);
         return ApiResponse.<GetAllMessageOfRoomResponse>builder()
                 .code(200)
-                .message("Get messages successfully")
+                .message("Lấy danh sách tin nhắn thành công")
                 .result(result)
                 .build();
     }

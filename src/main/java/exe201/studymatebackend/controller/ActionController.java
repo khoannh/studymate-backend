@@ -34,7 +34,7 @@ public class ActionController {
         UpdateActionCoinResponse result = actionService.updateActionCoin(actionID, updateActionCoinRequest);
         return ApiResponse.<UpdateActionCoinResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("Action updated successfully")
+                .message("Hành động được cập nhật thành công")
                 .result(result)
                 .build();
     }

@@ -29,7 +29,7 @@ public class AccountController {
         List<GetAllAccountResponse> result = accountService.getAllAccount();
         return ApiResponse.<List<GetAllAccountResponse>>builder()
                 .code(HttpStatus.OK.value())
-                .message("Retrieved all accounts successfully")
+                .message("Lấy danh sách tài khoản thành công")
                 .result(result)
                 .build();
     }
@@ -96,6 +96,7 @@ public class AccountController {
                 .message("Password renewed successfully")
                 .build();
     }
+
     // Upload avatar
     @PostMapping(value = "/accounts/current/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<AvatarResponse> uploadAvatar(@RequestParam("file") MultipartFile file) {
@@ -116,6 +117,7 @@ public class AccountController {
                 .contentType(MediaType.IMAGE_PNG)
                 .body(image);
     }
+
     // Update current avatar
     @PutMapping(value = "/accounts/current/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<AvatarResponse> updateCurrentAvatar(@RequestParam("file") MultipartFile file) {
@@ -145,7 +147,7 @@ public class AccountController {
         GetAccountPageResponse result = accountService.getAccountPage(page, size);
         return ApiResponse.<GetAccountPageResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("Retrieved all accounts successfully")
+                .message("Lấy danh sách tài khoản thành công")
                 .result(result)
                 .build();
     }
@@ -155,7 +157,7 @@ public class AccountController {
         GetCoinResponse result = accountService.getCoin();
         return ApiResponse.<GetCoinResponse>builder()
                 .code(HttpStatus.OK.value())
-                .message("Retrieved coin successfully")
+                .message("Lấy số coin thành công")
                 .result(result)
                 .build();
     }

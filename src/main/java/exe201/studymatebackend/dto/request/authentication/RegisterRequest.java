@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-    @NotBlank(message = "Username cannot be blank")
+    @NotBlank(message = "Tên đăng nhập không được để trống")
     private String username;
 
-    @NotBlank(message = "Password cannot be blank")
+    @NotBlank(message = "Mât khẩu không được để trống")
     private String password;
 
-    @NotBlank(message = "Confirm password cannot be blank")
+    @NotBlank(message = "Xác nhận mật khẩu không được để trống")
     private String confirmPassword;
 
-    @Email(message = "Email is not valid")
+    @Email(message = "Email không hợp lệ")
     private String email;
 
 }

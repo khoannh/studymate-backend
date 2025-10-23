@@ -15,7 +15,7 @@ public class UploadDocumentRequest {
     private String documentName;
 
     @URL(message = "URL tài liệu không hợp lệ")
-    private String documentURl;
+    private String documentURL;
 
     private String description;
 }

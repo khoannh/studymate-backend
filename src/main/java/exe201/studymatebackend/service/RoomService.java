@@ -1,10 +1,9 @@
 package exe201.studymatebackend.service;
 
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
-import exe201.studymatebackend.dto.response.room.CreateRoomResponse;
-import exe201.studymatebackend.dto.response.room.GetMyRoomResponse;
-import exe201.studymatebackend.dto.response.room.GetRoomInfoResponse;
-import exe201.studymatebackend.dto.response.room.GetRoomPageResponse;
+import exe201.studymatebackend.dto.response.room.*;
+
+import java.util.List;
 
 
 public interface RoomService {
@@ -19,4 +18,6 @@ public interface RoomService {
     GetMyRoomResponse getMyRoom(int page, int size);
 
     void leaveRoom(Integer roomID);
+
+    List<GetAllMembersResponse> getMembers(Integer roomID);
 }
