@@ -15,7 +15,7 @@ public class UploadDocumentResponse {
     private Integer documentID;
     private Integer roomID;
     private String documentName;
-    private String documentURl;
+    private String documentURL;
     private String description;
     private String uploader;
     private LocalDateTime uploadedAt;

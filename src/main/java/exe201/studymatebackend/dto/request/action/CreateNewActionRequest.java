@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateNewActionRequest {
-    @NotBlank(message = "Action name cannot be blank")
+    @NotBlank(message = "Tên hành động không được để trống")
     private String actionName;
 
-    @NotNull(message = "Coin cannot be null")
-    @PositiveOrZero(message = "Number of coin cannot be negative")
+    @NotNull(message = "Số lượng coin không được để trống")
+    @PositiveOrZero(message = "Số lượng coin phải là số không âm")
     private int actionCoin;
 }

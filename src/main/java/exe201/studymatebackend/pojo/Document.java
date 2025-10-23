@@ -22,7 +22,7 @@ public class Document {
     private String documentName;
 
     @Column(unique = true, nullable = false)
-    private String documentURl;
+    private String documentURL;
 
     @Column(unique = false, nullable = true, length = 225)
     private String description;

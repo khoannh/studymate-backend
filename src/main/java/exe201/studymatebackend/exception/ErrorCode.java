@@ -11,33 +11,34 @@ public enum ErrorCode {
     UNCATEGORIZED(1000, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // Account
-    USERNAME_ALREADY_EXIST(2000, "Username is already registered", HttpStatus.BAD_REQUEST),
-    EMAIL_ALREADY_EXIST(2001, "Email is already registered", HttpStatus.BAD_REQUEST),
-    PASSWORD_DOES_NOT_MATCH(2002, "Password does not match", HttpStatus.BAD_REQUEST),
-    USER_DOES_NOT_EXIST(2003, "User does not exist", HttpStatus.BAD_REQUEST),
-    OLD_PASSWORD_IS_WRONG(2004, "Old password is wrong", HttpStatus.BAD_REQUEST),
-    INVALID_PASSWORD(2005, "Username or password is wrong", HttpStatus.BAD_REQUEST),
-    ACCOUNT_IS_INACTIVE(2006, "Your account is inactive", HttpStatus.BAD_REQUEST),
-    FILE_UPLOAD_FAILED(2007, "File upload failed", HttpStatus.BAD_REQUEST), FILE_NOT_FOUND(2008, "File not found", HttpStatus.BAD_REQUEST),
+    USERNAME_ALREADY_EXIST(2000, "Tên đăng nhập đã tồn tại", HttpStatus.BAD_REQUEST),
+    EMAIL_ALREADY_EXIST(2001, "Email đã tồn tại", HttpStatus.BAD_REQUEST),
+    PASSWORD_DOES_NOT_MATCH(2002, "Mật khẩu và xác nhận mật khẩu không giống nhau", HttpStatus.BAD_REQUEST),
+    USER_DOES_NOT_EXIST(2003, "Người dùng không tồn tại", HttpStatus.BAD_REQUEST),
+    OLD_PASSWORD_IS_WRONG(2004, "Mật khẩu cũ không đúng", HttpStatus.BAD_REQUEST),
+    INVALID_PASSWORD(2005, "Tên đăng nhập hoặc mật khẩu không hợp lệ", HttpStatus.BAD_REQUEST),
+    ACCOUNT_IS_INACTIVE(2006, "Tài khoản của bạn đã bị khóa", HttpStatus.BAD_REQUEST),
+    FILE_UPLOAD_FAILED(2007, "Tải file thất bại", HttpStatus.BAD_REQUEST),
+    FILE_NOT_FOUND(2008, "Không tìm thấy file", HttpStatus.BAD_REQUEST),
     // Room
-    NOT_ENOUGH_COIN(3000, "Not enough coin. Please buy for more", HttpStatus.BAD_REQUEST),
-    ROOM_ALREADY_EXIST(3001, "Room already exist", HttpStatus.BAD_REQUEST),
-    ACCOUNT_ALREADY_JOINED_ROOM(3002, "Account already joined this room", HttpStatus.BAD_REQUEST),
-    ROOM_ALREADY_FULL(3003, "Room already full", HttpStatus.BAD_REQUEST),
+    NOT_ENOUGH_COIN(3000, "Không đủ coin, vui lòng mua thêm", HttpStatus.BAD_REQUEST),
+    ROOM_ALREADY_EXIST(3001, "Phòng học đã tồn tại", HttpStatus.BAD_REQUEST),
+    ACCOUNT_ALREADY_JOINED_ROOM(3002, "Bạn đã tham gia phòng học này rồi", HttpStatus.BAD_REQUEST),
+    ROOM_ALREADY_FULL(3003, "Phòng học đã đủ thành viên", HttpStatus.BAD_REQUEST),
     ROOM_DOES_NOT_EXIST(3004, "Phòng học không tồn tại", HttpStatus.BAD_REQUEST),
-    ACCOUNT_NOT_IN_ROOM(3005, "Account not in this room", HttpStatus.BAD_REQUEST),
-    OWNER_CANNOT_LEAVE_ROOM(3006, "Owner cannot leave the room, you must transfer permissions to someone first ", HttpStatus.BAD_REQUEST),
-    ROOM_IS_INACTIVE(3007, "This room is inactive", HttpStatus.BAD_REQUEST),
+    ACCOUNT_NOT_IN_ROOM(3005, "Bạn không phải là thành viên của phòng", HttpStatus.BAD_REQUEST),
+    OWNER_CANNOT_LEAVE_ROOM(3006, "Chủ phòng không thể rời phòng, vui lòng chuyển quyền cho thành viên khác trước", HttpStatus.BAD_REQUEST),
+    ROOM_IS_INACTIVE(3007, "Phòng này đã bị khóa", HttpStatus.BAD_REQUEST),
     // Action
-    ACTION_ALREADY_EXIST(4000, "Action already exist", HttpStatus.BAD_REQUEST),
-    ACTION_DOES_NOT_EXIST(4001, "Action does not exist", HttpStatus.BAD_REQUEST),
+    ACTION_ALREADY_EXIST(4000, "Hành động này đã tồn tại", HttpStatus.BAD_REQUEST),
+    ACTION_DOES_NOT_EXIST(4001, "Hành động này không tồn tại", HttpStatus.BAD_REQUEST),
     // Package
 
-    PACKAGE_ID_NOT_FOUND(5001, "Package id not found", HttpStatus.BAD_REQUEST),
+    PACKAGE_ID_NOT_FOUND(5001, "Không tìm thấy gói", HttpStatus.BAD_REQUEST),
     //topic
-    TOPIC_DOES_NOT_EXIST(6001, "Topic not found", HttpStatus.BAD_REQUEST),
+    TOPIC_DOES_NOT_EXIST(6001, "Không tìm thấy chủ đề", HttpStatus.BAD_REQUEST),
     //report
-    REPORT_NOT_FOUND(7001, "Report not found", HttpStatus.BAD_REQUEST),
+    REPORT_NOT_FOUND(7001, "Không tìm thấy báo cáo", HttpStatus.BAD_REQUEST),
 
 
     //Document

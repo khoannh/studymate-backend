@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -20,4 +21,6 @@ public interface AccountRoomRepository extends JpaRepository<AccountRoom, Intege
     Page<AccountRoom> findAllByAccountAndLeftAtIsNull(Account account, Pageable pageable);
 
     AccountRoom findByRoomAndRoomRole(Room room, RoomRole role);
+
+    List<AccountRoom> findAllByRoomAndLeftAtIsNull(Room room);
 }

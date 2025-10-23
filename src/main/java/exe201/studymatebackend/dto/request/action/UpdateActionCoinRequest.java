@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateActionCoinRequest {
 
-    @NotNull(message = "Action coin cannot be null")
+    @NotNull(message = "Số lượng coin không được để trống")
     private int actionCoin;
 }

@@ -283,4 +283,18 @@ public class RoomServiceImpl implements RoomService {
         }
         roomRepository.save(room);
     }
+
+    @Override
+    public List<GetAllMembersResponse> getMembers(Integer roomID) {
+        Room room = roomRepository.findByRoomID(roomID);
+        if (room == null) {
+            throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
+        }
+        List<AccountRoom> accountRooms = accountRoomRepository.findAllByRoomAndLeftAtIsNull(room);
+        return accountRooms.stream().map(accountRoom -> GetAllMembersResponse.builder()
+                .accountID(accountRoom.getAccount().getAccountID())
+                .username(accountRoom.getAccount().getUsername())
+                .joinedAt(accountRoom.getJoinedAt())
+                .build()).toList();
+    }
 }
