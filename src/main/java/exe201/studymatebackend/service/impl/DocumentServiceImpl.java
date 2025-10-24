@@ -84,9 +84,9 @@ public class DocumentServiceImpl implements DocumentService {
         if (room == null) {
             throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
         }
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "uploadedAt"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "uploadedAt"));
         Page<Document> documentPage = documentRepository.findByRoom(room, pageable);
-        if (documentPage == null) {
+        if (documentPage.isEmpty()) {
             throw new AppException(ErrorCode.DOCUMENT_NOT_FOUND);
         }
         List<GetAllDocumentResponse.DocumentResponse> documentResponses = documentPage.getContent().stream().map(doc -> GetAllDocumentResponse.DocumentResponse.builder()

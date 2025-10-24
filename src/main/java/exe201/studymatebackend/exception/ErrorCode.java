@@ -47,7 +47,8 @@ public enum ErrorCode {
     DOCUMENT_URL_ALREADY_EXISTS(8002, "Đường dẫn tài liệu đã tồn tại", HttpStatus.BAD_REQUEST),
     DOCUMENT_NOT_FOUND(8003, "Không tìm thấy tài liệu nào", HttpStatus.BAD_REQUEST),
 
-
+    // Study schedule
+    SCHEDULE_NOT_FOUND(9000, "Không tìm thấy lịch học nào", HttpStatus.BAD_REQUEST),
     ;
     private int detailCode;
     private String detailMessage;
