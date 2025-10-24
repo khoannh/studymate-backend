@@ -18,7 +18,6 @@ public class GetAllRoomResponse {
     private String topic;
     private boolean isPublic;
     private LocalDateTime createdAt;
-    //    private String ownerName;
     private boolean isActive;
     private int maxNumberOfMembers;
     private int numberOfMembers;

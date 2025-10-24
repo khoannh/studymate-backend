@@ -1,6 +1,7 @@
 package exe201.studymatebackend.service;
 
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
+import exe201.studymatebackend.dto.request.room.KickMemberRequest;
 import exe201.studymatebackend.dto.response.room.*;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface RoomService {
     void leaveRoom(Integer roomID);
 
     List<GetAllMembersResponse> getMembers(Integer roomID);
+
+    void kickMember(Integer roomID, KickMemberRequest request);
 }

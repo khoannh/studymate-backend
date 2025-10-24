@@ -1,6 +1,7 @@
 package exe201.studymatebackend.service.impl;
 
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
+import exe201.studymatebackend.dto.request.room.KickMemberRequest;
 import exe201.studymatebackend.dto.response.room.*;
 import exe201.studymatebackend.enums.RoomRole;
 import exe201.studymatebackend.exception.AppException;
@@ -191,7 +192,6 @@ public class RoomServiceImpl implements RoomService {
                 .roomDescription(room.getRoomDescription())
                 .topic(room.getTopic().getTopicName())
                 .createdAt(room.getCreatedAt())
-//                .ownerName(accountRepository.findByAccountID(accountRoomRepository.findAccountIdByRoomAndRoomRole(room, RoomRole.OWNER)).getUsername())
                 .isActive(room.isActive())
                 .maxNumberOfMembers(room.getMaxNumberOfMembers())
                 .isPublic(room.isPublic())
@@ -296,5 +296,30 @@ public class RoomServiceImpl implements RoomService {
                 .username(accountRoom.getAccount().getUsername())
                 .joinedAt(accountRoom.getJoinedAt())
                 .build()).toList();
+    }
+
+    @Override
+    @Transactional
+    public void kickMember(Integer roomID, KickMemberRequest request) {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer accountID = account.getAccountID();
+        Account kicker = accountRepository.findByAccountID(accountID);
+        Room room = roomRepository.findByRoomID(roomID);
+        if (room == null) {
+            throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
+        }
+        Account member = accountRepository.findByAccountID(request.getMemberID());
+        AccountRoom accountRoom = accountRoomRepository.findAccountRoomByAccountAndRoomAndLeftAtIsNull(member, room);
+        if (accountRoom == null) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_IN_ROOM);
+        }
+        Account owner = accountRoomRepository.findByRoomAndRoomRole(room, RoomRole.OWNER).getAccount();
+        if ((kicker != owner) || (owner == member)) {
+            throw new AppException(ErrorCode.YOU_HAVE_NOT_PERMISSION);
+        }
+        accountRoom.setLeftAt(LocalDateTime.now());
+        accountRoomRepository.save(accountRoom);
+        room.setNumberOfMembers(room.getNumberOfMembers() - 1);
+        roomRepository.save(room);
     }
 }
