@@ -192,7 +192,6 @@ public class RoomServiceImpl implements RoomService {
                 .roomDescription(room.getRoomDescription())
                 .topic(room.getTopic().getTopicName())
                 .createdAt(room.getCreatedAt())
-//                .ownerName(accountRepository.findByAccountID(accountRoomRepository.findAccountIdByRoomAndRoomRole(room, RoomRole.OWNER)).getUsername())
                 .isActive(room.isActive())
                 .maxNumberOfMembers(room.getMaxNumberOfMembers())
                 .isPublic(room.isPublic())
