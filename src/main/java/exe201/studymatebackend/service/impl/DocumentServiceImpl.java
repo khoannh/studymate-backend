@@ -5,12 +5,14 @@ import exe201.studymatebackend.dto.request.document.UploadDocumentRequest;
 import exe201.studymatebackend.dto.response.document.GetAllDocumentResponse;
 import exe201.studymatebackend.dto.response.document.UpdateDocumentResponse;
 import exe201.studymatebackend.dto.response.document.UploadDocumentResponse;
+import exe201.studymatebackend.enums.RoomRole;
 import exe201.studymatebackend.exception.AppException;
 import exe201.studymatebackend.exception.ErrorCode;
 import exe201.studymatebackend.pojo.Account;
 import exe201.studymatebackend.pojo.Document;
 import exe201.studymatebackend.pojo.Room;
 import exe201.studymatebackend.repository.AccountRepository;
+import exe201.studymatebackend.repository.AccountRoomRepository;
 import exe201.studymatebackend.repository.DocumentRepository;
 import exe201.studymatebackend.repository.RoomRepository;
 import exe201.studymatebackend.service.DocumentService;
@@ -37,6 +39,9 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AccountRoomRepository accountRoomRepository;
 
     @Override
     @Transactional
@@ -106,24 +111,30 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     @Transactional
     public UpdateDocumentResponse updateDocument(Integer documentID, UpdateDocumentRequest request) {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer accountID = account.getAccountID();
+        Account updater = accountRepository.findByAccountID(accountID);
         Document document = documentRepository.findByDocumentID(documentID);
         if (document == null) {
             throw new AppException(ErrorCode.DOCUMENT_NOT_FOUND);
         }
-        if (!document.getDocumentName().equals(request.getDocumentName())) {
+        if (!document.getUploader().equals(updater.getUsername())) {
+            throw new AppException(ErrorCode.YOU_HAVE_NOT_PERMISSION);
+        }
+        if (!document.getDocumentName().equals(request.getDocumentName()) && !(request.getDocumentName().trim().isEmpty())) {
             if (documentRepository.findByDocumentName(request.getDocumentName()) != null) {
                 throw new AppException(ErrorCode.DOCUMENT_NAME_ALREADY_EXISTS);
             }
             document.setDocumentName(request.getDocumentName());
         }
-        if (!document.getDocumentURL().equals(request.getDocumentURL())) {
+        if (!document.getDocumentURL().equals(request.getDocumentURL()) && !(request.getDocumentURL().trim().isEmpty())) {
             if (documentRepository.findByDocumentURL(request.getDocumentURL()) != null) {
                 throw new AppException(ErrorCode.DOCUMENT_URL_ALREADY_EXISTS);
             }
             document.setDocumentURL(request.getDocumentURL());
         }
 
-        if (request.getDescription() != null) {
+        if (!request.getDescription().trim().isEmpty()) {
             document.setDescription(request.getDescription());
         }
         documentRepository.save(document);
@@ -136,12 +147,21 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    @Transactional
     public void deleteDocument(Integer documentID) {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer accountID = account.getAccountID();
+        Account deleter = accountRepository.findByAccountID(accountID);
         Document document = documentRepository.findByDocumentID(documentID);
         if (document == null) {
             throw new AppException(ErrorCode.DOCUMENT_NOT_FOUND);
         }
-        documentRepository.delete(document);
+        Account ownerRoom = (accountRoomRepository.findByRoomAndRoomRole(document.getRoom(), RoomRole.OWNER)).getAccount();
+        if ((deleter == ownerRoom) || ((deleter.getUsername().equals(document.getUploader())))) {
+            documentRepository.delete(document);
+        } else {
+            throw new AppException(ErrorCode.YOU_HAVE_NOT_PERMISSION);
+        }
     }
 
 
