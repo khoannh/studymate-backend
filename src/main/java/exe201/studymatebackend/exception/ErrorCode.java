@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // Chung
     UNCATEGORIZED(1000, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+    YOU_HAVE_NOT_PERMISSION(1001, "Bạn không có quyền thực hiện thao tác này", HttpStatus.BAD_REQUEST),
 
     // Account
     USERNAME_ALREADY_EXIST(2000, "Tên đăng nhập đã tồn tại", HttpStatus.BAD_REQUEST),
@@ -45,6 +46,7 @@ public enum ErrorCode {
     DOCUMENT_NAME_ALREADY_EXISTS(8001, "Tên tài liệu đã tồn tại", HttpStatus.BAD_REQUEST),
     DOCUMENT_URL_ALREADY_EXISTS(8002, "Đường dẫn tài liệu đã tồn tại", HttpStatus.BAD_REQUEST),
     DOCUMENT_NOT_FOUND(8003, "Không tìm thấy tài liệu nào", HttpStatus.BAD_REQUEST),
+
 
     ;
     private int detailCode;
