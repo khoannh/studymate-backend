@@ -1,9 +1,11 @@
 package exe201.studymatebackend.controller;
 
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
+import exe201.studymatebackend.dto.request.room.KickMemberRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
 import exe201.studymatebackend.dto.response.room.*;
 import exe201.studymatebackend.service.RoomService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -88,6 +90,15 @@ public class RoomController {
                 .code(HttpStatus.OK.value())
                 .message("Lấy danh sách thành viên thành công")
                 .result(result)
+                .build();
+    }
+
+    @PostMapping("/room/{roomID}/kick")
+    public ApiResponse<Void> kickMember(@Valid @RequestBody KickMemberRequest request, @PathVariable Integer roomID) {
+        roomService.kickMember(roomID, request);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Xóa thành viên thành công")
                 .build();
     }
 

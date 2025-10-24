@@ -27,7 +27,7 @@ public enum ErrorCode {
     ACCOUNT_ALREADY_JOINED_ROOM(3002, "Bạn đã tham gia phòng học này rồi", HttpStatus.BAD_REQUEST),
     ROOM_ALREADY_FULL(3003, "Phòng học đã đủ thành viên", HttpStatus.BAD_REQUEST),
     ROOM_DOES_NOT_EXIST(3004, "Phòng học không tồn tại", HttpStatus.BAD_REQUEST),
-    ACCOUNT_NOT_IN_ROOM(3005, "Bạn không phải là thành viên của phòng", HttpStatus.BAD_REQUEST),
+    ACCOUNT_NOT_IN_ROOM(3005, "Tài khoản không phải là thành viên của phòng", HttpStatus.BAD_REQUEST),
     OWNER_CANNOT_LEAVE_ROOM(3006, "Chủ phòng không thể rời phòng, vui lòng chuyển quyền cho thành viên khác trước", HttpStatus.BAD_REQUEST),
     ROOM_IS_INACTIVE(3007, "Phòng này đã bị khóa", HttpStatus.BAD_REQUEST),
     // Action
