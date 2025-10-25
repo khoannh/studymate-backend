@@ -2,6 +2,7 @@ package exe201.studymatebackend.controller;
 
 import exe201.studymatebackend.dto.request.report.UpdateReportRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
+import exe201.studymatebackend.dto.response.report.ReportResponse;
 import exe201.studymatebackend.pojo.Report;
 import exe201.studymatebackend.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping("/reports")
-    public ApiResponse<List<Report>> getAllReports() {
-        return ApiResponse.<List<Report>>builder()
+    public ApiResponse<List<ReportResponse>> getAllReports() {
+        return ApiResponse.<List<ReportResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Retrieved reports successfully")
                 .result(reportService.getAllReports())

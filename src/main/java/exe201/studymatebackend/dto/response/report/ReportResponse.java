@@ -1,6 +1,6 @@
 package exe201.studymatebackend.dto.response.report;
 
-import exe201.studymatebackend.pojo.ReportStatus;
+import exe201.studymatebackend.enums.ReportStatus;
 import lombok.Builder;
 import lombok.Data;
 import java.time.LocalDateTime;

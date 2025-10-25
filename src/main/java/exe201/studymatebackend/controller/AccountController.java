@@ -138,7 +138,14 @@ public class AccountController {
                 .message("Account banned successfully")
                 .build();
     }
-
+    @PutMapping("/accounts/{username}/unban")
+    public ApiResponse<Void> unbanAccount(@PathVariable String username) {
+        accountService.unbanAccount(username);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Account unbanned successfully")
+                .build();
+    }
 
     @GetMapping("/account")
     public ApiResponse<GetAccountPageResponse> getAccounts(

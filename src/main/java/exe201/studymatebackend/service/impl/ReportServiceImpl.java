@@ -1,11 +1,12 @@
 package exe201.studymatebackend.service.impl;
 
 import exe201.studymatebackend.dto.request.report.UpdateReportRequest;
+import exe201.studymatebackend.dto.response.report.ReportResponse;
 import exe201.studymatebackend.exception.AppException;
 import exe201.studymatebackend.exception.ErrorCode;
 import exe201.studymatebackend.pojo.Account;
 import exe201.studymatebackend.pojo.Report;
-import exe201.studymatebackend.pojo.ReportStatus;
+import exe201.studymatebackend.enums.ReportStatus;
 import exe201.studymatebackend.repository.AccountRepository;
 import exe201.studymatebackend.repository.ReportRepository;
 import exe201.studymatebackend.service.ReportService;
@@ -25,12 +26,24 @@ public class ReportServiceImpl implements ReportService {
     private final AccountRepository accountRepository;
 
     @Override
-    public List<Report> getAllReports() {
+    public List<ReportResponse> getAllReports() {
         List<Report> reports = reportRepository.findAll();
+
         if (reports.isEmpty()) {
             throw new AppException(ErrorCode.REPORT_NOT_FOUND);
         }
-        return reports;
+
+        return reports.stream().map(report ->
+                ReportResponse.builder()
+                        .reportId(report.getId())
+                        .senderName(report.getSender().getUsername())
+                        .reportedName(report.getReported().getUsername())
+                        .content(report.getContent())
+                        .evidence(report.getEvidence())
+                        .status(report.getStatus())
+                        .createdAt(report.getCreatedAt())
+                        .build()
+        ).toList();
     }
 
     @Override
@@ -94,6 +107,7 @@ public class ReportServiceImpl implements ReportService {
         return reportRepository.save(report);
     }
 
+
     @Override
     public void deleteReport(Integer id) {
         if (!reportRepository.existsById(id)) {
@@ -101,4 +115,6 @@ public class ReportServiceImpl implements ReportService {
         }
         reportRepository.deleteById(id);
     }
+
+
 }

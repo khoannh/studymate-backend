@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+
 @Builder
 public class Package {
 
@@ -23,4 +23,12 @@ public class Package {
     private Integer tokenAmount;
 
     private Double price;
+    public Package(Integer id, String name, String description, Integer tokenAmount, Double price) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.tokenAmount = tokenAmount;
+        this.price = price;
+    }
+
 }

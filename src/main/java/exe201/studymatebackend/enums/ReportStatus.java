@@ -1,4 +1,4 @@
-package exe201.studymatebackend.pojo;
+package exe201.studymatebackend.enums;
 
 public enum ReportStatus {
     PENDING,     // mới tạo
