@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -62,13 +63,33 @@ public class StudyScheduleServiceImpl implements StudyScheduleService {
 
         for (AccountRoom member : members) {
             String email = member.getAccount().getEmail();
-            emailService.sendEmail(
-                    email,
-                    "📅 Lịch học mới được tạo!",
-                    "Buổi học '" + newStudySchedule.getTitle() +
-                            "' sẽ bắt đầu lúc " + newStudySchedule.getStartTime() +
-                            ".\nLink tham gia: " + newStudySchedule.getMeetingLink()
+
+            String formattedTime = newStudySchedule.getStartTime()
+                    .format(DateTimeFormatter.ofPattern("HH:mm 'ngày' dd/MM/yyyy"));
+
+            String htmlContent = """
+                    <div style="font-family: Arial, sans-serif; color: #333;">
+                        <h2 style="color: #2c7be5;">📅 Lịch học mới được tạo!</h2>
+                        <p>Xin chào,</p>
+                        <p>Buổi học <strong style="color:#2c7be5;">'%s'</strong> sẽ bắt đầu lúc 
+                           <strong>%s</strong>.</p>
+                        <p>👉 Link tham gia lớp học: 
+                           <a href="%s" style="color:#2c7be5; text-decoration:none;">
+                               %s
+                           </a>
+                        </p>
+                        <br/>
+                        <hr/>
+                        <p style="font-size:13px; color:#888;">Hệ thống quản lý lịch học - StudyMate Team</p>
+                    </div>
+                    """.formatted(
+                    newStudySchedule.getTitle(),
+                    formattedTime,
+                    newStudySchedule.getMeetingLink(),
+                    newStudySchedule.getMeetingLink()
             );
+
+            emailService.sendHtmlEmail(email, "📚 Lịch học mới được tạo!", htmlContent);
         }
 
 
@@ -136,14 +157,47 @@ public class StudyScheduleServiceImpl implements StudyScheduleService {
 
             for (AccountRoom member : members) {
                 String email = member.getAccount().getEmail();
-                emailService.sendEmail(
+
+                String formattedTime = schedule.getStartTime()
+                        .format(DateTimeFormatter.ofPattern("HH:mm 'ngày' dd/MM/yyyy"));
+
+                String htmlContent = """
+                        <div style="font-family: Arial, sans-serif; background:#f4f6f8; padding:20px;">
+                          <div style="max-width:600px; margin:auto; background:#fff; border-radius:10px; padding:20px;">
+                            <h2 style="color:#e67e22; text-align:center;">⏰ Nhắc nhở: Buổi học sắp bắt đầu!</h2>
+                        
+                            <p>Xin chào,</p>
+                            <p>Buổi học <strong style="color:#2c7be5;">'%s'</strong> sẽ bắt đầu lúc 
+                               <strong>%s</strong>.</p>
+                        
+                            <p style="margin-top:16px;">
+                              👉 <a href="%s" 
+                                   style="background:#2c7be5;color:white;padding:10px 16px;border-radius:5px;text-decoration:none;">
+                                   Tham gia buổi học
+                              </a>
+                            </p>
+                        
+                            <p style="margin-top:16px;">💡 Hãy chuẩn bị trước vài phút để buổi học diễn ra thuận lợi nhé!</p>
+                        
+                            <hr style="margin:20px 0;border:none;border-top:1px solid #ddd;"/>
+                            <p style="text-align:center;font-size:13px;color:#888;">
+                              Hệ thống quản lý lịch học - StudyMate Team
+                            </p>
+                          </div>
+                        </div>
+                        """.formatted(
+                        schedule.getTitle(),
+                        formattedTime,
+                        schedule.getMeetingLink()
+                );
+
+                emailService.sendHtmlEmail(
                         email,
                         "⏰ Nhắc nhở: Buổi học sắp bắt đầu!",
-                        "Buổi học '" + schedule.getTitle() + "' sẽ bắt đầu lúc " +
-                                schedule.getStartTime() +
-                                ".\nLink tham gia: " + schedule.getMeetingLink()
+                        htmlContent
                 );
             }
+
 
             // Cập nhật lại để không gửi trùng lần nữa
             schedule.setNotified(true);
