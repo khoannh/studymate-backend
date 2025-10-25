@@ -1,5 +1,6 @@
 package exe201.studymatebackend.pojo;
 
+import exe201.studymatebackend.enums.ReportStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;

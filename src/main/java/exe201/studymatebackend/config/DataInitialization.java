@@ -4,8 +4,10 @@ import exe201.studymatebackend.enums.Role;
 import exe201.studymatebackend.pojo.Account;
 import exe201.studymatebackend.pojo.Action;
 import exe201.studymatebackend.pojo.Topic;
+import exe201.studymatebackend.pojo.Package;
 import exe201.studymatebackend.repository.AccountRepository;
 import exe201.studymatebackend.repository.ActionRepository;
+import exe201.studymatebackend.repository.PackageRepository;
 import exe201.studymatebackend.repository.TopicRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +21,7 @@ public class DataInitialization {
 
 
     @Bean
-    protected ApplicationRunner initData(AccountRepository accountRepository, ActionRepository actionRepository, TopicRepository topicRepository, PasswordEncoder passwordEncoder) {
+    protected ApplicationRunner initData(AccountRepository accountRepository, ActionRepository actionRepository, TopicRepository topicRepository,PackageRepository packageRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             if (accountRepository.count() == 0) {
                 Account account = new Account("admin@gmail.com", passwordEncoder.encode("123456"), "admin", Role.ADMIN, 100, LocalDateTime.now(), LocalDateTime.now(), true);
@@ -39,6 +41,15 @@ public class DataInitialization {
                 topicRepository.save(exe201);
 
             }
+            if (packageRepository.count() == 0) {
+                packageRepository.save(new Package(null, "Free",
+                        "Free package with 0 cost", 0, 0.0));
+                packageRepository.save(new Package(null, "VIP",
+                        "VIP package with 100 tokens", 100, 20000.0));
+                packageRepository.save(new Package(null, "VIP Pro",
+                        "VIP Pro package with 350 tokens", 350, 50000.0));
+            }
+
 
 
         };

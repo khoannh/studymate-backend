@@ -254,6 +254,23 @@ public class AccountServiceImpl implements AccountService {
         account.setUpdatedAt(LocalDateTime.now());
         accountRepository.save(account);
     }
+    @Override
+    @Transactional
+    public void unbanAccount(String username) {
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) {
+            throw new AppException(ErrorCode.USER_DOES_NOT_EXIST);
+        }
+
+        if (Boolean.TRUE.equals(account.getIsActive())) {
+            throw new AppException(ErrorCode.USER_ALREADY_ACTIVE);
+        }
+
+        account.setIsActive(true);
+        account.setUpdatedAt(LocalDateTime.now());
+        accountRepository.save(account);
+    }
+
 
     @Override
     public GetCoinResponse getCoin() {

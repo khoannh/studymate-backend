@@ -21,6 +21,7 @@ public enum ErrorCode {
     ACCOUNT_IS_INACTIVE(2006, "Tài khoản của bạn đã bị khóa", HttpStatus.BAD_REQUEST),
     FILE_UPLOAD_FAILED(2007, "Tải file thất bại", HttpStatus.BAD_REQUEST),
     FILE_NOT_FOUND(2008, "Không tìm thấy file", HttpStatus.BAD_REQUEST),
+    USER_ALREADY_ACTIVE(2009, "Tài khoản đã được kích hoạt", HttpStatus.BAD_REQUEST),
     // Room
     NOT_ENOUGH_COIN(3000, "Không đủ coin, vui lòng mua thêm", HttpStatus.BAD_REQUEST),
     ROOM_ALREADY_EXIST(3001, "Phòng học đã tồn tại", HttpStatus.BAD_REQUEST),
