@@ -39,11 +39,8 @@ public class ReportController {
                 .build();
     }
 
-    @PostMapping(
-            value = "/reports",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
-    public ApiResponse<Report> createReport(
+    @PostMapping(value = "/reports", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<ReportResponse> createReport(
             @RequestParam("reportedUsername") String reportedUsername,
             @RequestParam("content") String content,
             @RequestPart(value = "evidence", required = false) MultipartFile evidence,
@@ -51,10 +48,21 @@ public class ReportController {
     ) {
         String currentUsername = authentication.getName();
         Report report = reportService.createReport(currentUsername, reportedUsername, content, evidence);
-        return ApiResponse.<Report>builder()
+
+        ReportResponse response = ReportResponse.builder()
+                .reportId(report.getId())
+                .senderName(report.getSender().getUsername())
+                .reportedName(report.getReported().getUsername())
+                .content(report.getContent())
+                .evidence(report.getEvidence()) // hoặc encode Base64
+                .status(report.getStatus())
+                .createdAt(report.getCreatedAt())
+                .build();
+
+        return ApiResponse.<ReportResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message("Created report successfully")
-                .result(report)
+                .result(response)
                 .build();
     }
 
