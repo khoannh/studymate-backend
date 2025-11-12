@@ -40,11 +40,17 @@ public class Room {
     @Column(nullable = false)
     private int numberOfMembers;
 
+    @Column(nullable = true)
+    private String roomPassword;
+
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AccountRoom> accountRoomList;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Document> documentList;
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<QuizSet> quizSetList;
 
 
 }

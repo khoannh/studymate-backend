@@ -1,6 +1,7 @@
 package exe201.studymatebackend.service.impl;
 
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
+import exe201.studymatebackend.dto.request.room.JoinRoomRequest;
 import exe201.studymatebackend.dto.request.room.KickMemberRequest;
 import exe201.studymatebackend.dto.response.room.*;
 import exe201.studymatebackend.enums.RoomRole;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +70,12 @@ public class RoomServiceImpl implements RoomService {
         Room room = new Room();
         room.setRoomName(request.getRoomName());
         room.setRoomDescription(request.getRoomDescription());
-        room.setPublic(request.isPublic());
+        if (!request.isPublic()) {
+            room.setPublic(false);
+            room.setRoomPassword(request.getRoomPassword());
+        } else {
+            room.setPublic(true);
+        }
         Topic topic = topicRepository.findByTopicName(request.getTopic());
         if (topic == null) {
             throw new AppException(ErrorCode.TOPIC_DOES_NOT_EXIST);
@@ -111,7 +118,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public void joinRoom(Integer roomID) {
+    public void joinRoom(Integer roomID, JoinRoomRequest request) {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer accountID = account.getAccountID();
         Account member = accountRepository.findByAccountID(accountID);
@@ -121,6 +128,12 @@ public class RoomServiceImpl implements RoomService {
         }
         if (room.getNumberOfMembers() >= room.getMaxNumberOfMembers()) {
             throw new AppException(ErrorCode.ROOM_ALREADY_FULL);
+        }
+        if (!room.isPublic()) {
+            String inputPassword = (request != null) ? request.getRoomPassword() : null;
+            if (inputPassword == null || !room.getRoomPassword().equals(inputPassword)) {
+                throw new AppException(ErrorCode.ROOM_PASSWORD_IS_WRONG);
+            }
         }
         // join lại sau khi đã rời
         Optional<AccountRoom> existingAccountRoomOpt = accountRoomRepository.findByAccountAndRoom(member, room);
@@ -184,19 +197,40 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public GetRoomPageResponse getAllRoom(int page, int size) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Account tempAccount = null;
+
+        if (authentication != null && authentication.isAuthenticated() &&
+                authentication.getPrincipal() instanceof Account) {
+            tempAccount = (Account) authentication.getPrincipal();
+        }
+
+        final Account account = tempAccount;
+
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Room> rooms = roomRepository.findAll(pageable);
-        List<GetAllRoomResponse> content = rooms.getContent().stream().map(room -> GetAllRoomResponse.builder()
-                .roomID(room.getRoomID())
-                .roomName(room.getRoomName())
-                .roomDescription(room.getRoomDescription())
-                .topic(room.getTopic().getTopicName())
-                .createdAt(room.getCreatedAt())
-                .isActive(room.isActive())
-                .maxNumberOfMembers(room.getMaxNumberOfMembers())
-                .isPublic(room.isPublic())
-                .numberOfMembers(room.getNumberOfMembers())
-                .build()).toList();
+
+        List<GetAllRoomResponse> content = rooms.getContent().stream().map(room -> {
+            boolean joined = false;
+            if (account != null) {
+                joined = accountRoomRepository
+                        .findAccountRoomByAccountAndRoomAndLeftAtIsNull(account, room) != null;
+            }
+
+            return GetAllRoomResponse.builder()
+                    .roomID(room.getRoomID())
+                    .roomName(room.getRoomName())
+                    .roomDescription(room.getRoomDescription())
+                    .topic(room.getTopic().getTopicName())
+                    .createdAt(room.getCreatedAt())
+                    .isActive(room.isActive())
+                    .maxNumberOfMembers(room.getMaxNumberOfMembers())
+                    .isPublic(room.isPublic())
+                    .numberOfMembers(room.getNumberOfMembers())
+                    .joined(joined)
+                    .build();
+        }).toList();
+
         return GetRoomPageResponse.builder()
                 .content(content)
                 .pageNumber(rooms.getNumber())
@@ -207,8 +241,10 @@ public class RoomServiceImpl implements RoomService {
                 .build();
     }
 
+
     @Override
     public GetRoomInfoResponse getRoomInfo(int roomID) {
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Room room = roomRepository.findByRoomID(roomID);
         if (room == null) {
             throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
@@ -225,6 +261,7 @@ public class RoomServiceImpl implements RoomService {
                 .maxNumberOfMembers(room.getMaxNumberOfMembers())
                 .isPublic(room.isPublic())
                 .numberOfMembers(room.getNumberOfMembers())
+                .joined(accountRoomRepository.findAccountRoomByAccountAndRoomAndLeftAtIsNull(account, room) != null ? true : false)
                 .build();
     }
 

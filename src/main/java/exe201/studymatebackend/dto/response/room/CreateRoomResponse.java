@@ -19,6 +19,7 @@ public class CreateRoomResponse {
     private boolean isPublic;
     private LocalDateTime createdAt;
     private boolean isActive;
+    private String roomPassword;
     private int maxNumberOfMembers;
 
 }
