@@ -1,6 +1,7 @@
 package exe201.studymatebackend.controller;
 
 import exe201.studymatebackend.dto.request.room.CreateRoomRequest;
+import exe201.studymatebackend.dto.request.room.JoinRoomRequest;
 import exe201.studymatebackend.dto.request.room.KickMemberRequest;
 import exe201.studymatebackend.dto.response.ApiResponse;
 import exe201.studymatebackend.dto.response.room.*;
@@ -30,8 +31,8 @@ public class RoomController {
     }
 
     @PostMapping("/room/{roomID}/join")
-    public ApiResponse<Void> joinRoom(@PathVariable Integer roomID) {
-        roomService.joinRoom(roomID);
+    public ApiResponse<Void> joinRoom(@PathVariable Integer roomID, @RequestBody(required = false) JoinRoomRequest request) {
+        roomService.joinRoom(roomID, request);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Tham gia phòng thành công")

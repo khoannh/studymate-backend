@@ -24,6 +24,8 @@ public class CreateRoomRequest {
     @NotNull(message = "Quyền riêng tư không được để trống")
     private boolean isPublic;
 
+    private String roomPassword;
+
     @NotNull(message = "Số lượng thành viên tối đa không được để trống")
     private int maxNumberOfMembers;
 

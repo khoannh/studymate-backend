@@ -22,4 +22,5 @@ public class GetRoomInfoResponse {
     private boolean isActive;
     private int maxNumberOfMembers;
     private int numberOfMembers;
+    private Boolean joined;
 }

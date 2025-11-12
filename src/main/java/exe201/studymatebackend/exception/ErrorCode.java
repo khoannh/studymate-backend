@@ -31,6 +31,7 @@ public enum ErrorCode {
     ACCOUNT_NOT_IN_ROOM(3005, "Tài khoản không phải là thành viên của phòng", HttpStatus.BAD_REQUEST),
     OWNER_CANNOT_LEAVE_ROOM(3006, "Chủ phòng không thể rời phòng, vui lòng chuyển quyền cho thành viên khác trước", HttpStatus.BAD_REQUEST),
     ROOM_IS_INACTIVE(3007, "Phòng này đã bị khóa", HttpStatus.BAD_REQUEST),
+    ROOM_PASSWORD_IS_WRONG(3008, "Mật khẩu phòng không đúng", HttpStatus.BAD_REQUEST),
     // Action
     ACTION_ALREADY_EXIST(4000, "Hành động này đã tồn tại", HttpStatus.BAD_REQUEST),
     ACTION_DOES_NOT_EXIST(4001, "Hành động này không tồn tại", HttpStatus.BAD_REQUEST),
@@ -50,6 +51,10 @@ public enum ErrorCode {
 
     // Study schedule
     SCHEDULE_NOT_FOUND(9000, "Không tìm thấy lịch học nào", HttpStatus.BAD_REQUEST),
+
+    // Quiz + Gemini
+    GEMINI_CANNOT_FOUND_RESPONSE(10000, "Không tìm thấy câu trả lời hợp lệ từ Gemini API", HttpStatus.BAD_REQUEST),
+    QUIZSET_NOT_FOUND(10001, "Không tìm thấy bài quiz", HttpStatus.BAD_REQUEST),
     ;
     private int detailCode;
     private String detailMessage;

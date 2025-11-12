@@ -1,6 +1,5 @@
 package exe201.studymatebackend.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import exe201.studymatebackend.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,7 +36,7 @@ public class Account implements UserDetails {
     private Role role;
 
     @Column(nullable = false)
-    private int coin;
+    private Integer coin;
 
     @Column(nullable = true)
     private LocalDateTime createdAt;
@@ -52,6 +51,9 @@ public class Account implements UserDetails {
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AccountRoom> accountRoomList;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<AccountQuizSet> accountQuizSetList;
 
     public Account() {
     }
