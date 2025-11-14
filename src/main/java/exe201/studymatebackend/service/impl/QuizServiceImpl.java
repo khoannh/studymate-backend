@@ -135,7 +135,7 @@ public class QuizServiceImpl implements QuizService {
         if (accountRoomOpt.isEmpty()) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_IN_ROOM);
         }
-        List<QuizSet> quizSetList = quizSetRepository.findAllByRoom(room);
+        List<QuizSet> quizSetList = quizSetRepository.findAllByRoomOrderByCreatedAtDesc(room);
         return quizSetList.stream().map(quizSet -> GetAllQuizSetResponse.builder()
                 .quizSetID(quizSet.getQuizSetID())
                 .quizSetName(quizSet.getQuizSetName())

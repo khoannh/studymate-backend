@@ -12,5 +12,5 @@ public class PackageResponse {
     private String name;
     private String description;
     private Integer tokenAmount;
-    private Double price;
+    private Integer price;
 }

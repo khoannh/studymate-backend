@@ -55,6 +55,9 @@ public class Account implements UserDetails {
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AccountQuizSet> accountQuizSetList;
 
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PaymentTransaction> accountTransactionList;
+
     public Account() {
     }
 

@@ -13,7 +13,7 @@ public interface QuizSetRepository extends JpaRepository<QuizSet, Integer> {
 
     List<QuizSet> findAllByExpiredAtBefore(LocalDateTime now);
 
-    List<QuizSet> findAllByRoom(Room room);
+    List<QuizSet> findAllByRoomOrderByCreatedAtDesc(Room room);
 
     QuizSet findByQuizSetID(Integer quizSetID);
 }
