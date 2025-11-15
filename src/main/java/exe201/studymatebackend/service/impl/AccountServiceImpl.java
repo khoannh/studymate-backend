@@ -308,6 +308,33 @@ public class AccountServiceImpl implements AccountService {
                 .isActive(account.getIsActive())
                 .build();
     }
+    @Override
+    public PublicAccountProfileResponse getPublicProfileByUsername(String username) {
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) {
+            throw new AppException(ErrorCode.USER_DOES_NOT_EXIST);
+        }
+
+        return PublicAccountProfileResponse.builder()
+                .accountID(account.getAccountID())
+                .username(account.getUsername())
+                .email(account.getEmail())
+                .trustScore(account.getTrustScore())  // ⭐ Integer
+                .build();
+    }
+    @Override
+    public byte[] getAvatarByUsername(String username) {
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) {
+            throw new AppException(ErrorCode.USER_DOES_NOT_EXIST);
+        }
+
+        if (account.getAvatar() == null) {
+            throw new AppException(ErrorCode.FILE_NOT_FOUND);
+        }
+
+        return account.getAvatar();
+    }
 
 
 }

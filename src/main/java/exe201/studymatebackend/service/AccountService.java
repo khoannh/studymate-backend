@@ -32,4 +32,8 @@ public interface AccountService {
     void unbanAccount(String username);
 
     GetCoinResponse getCoin();
+
+    PublicAccountProfileResponse getPublicProfileByUsername(String username);
+
+    byte[] getAvatarByUsername(String username);
 }

@@ -168,4 +168,22 @@ public class AccountController {
                 .result(result)
                 .build();
     }
+    @GetMapping("/accounts/profile/{username}")
+    public ApiResponse<PublicAccountProfileResponse> getPublicProfile(@PathVariable String username) {
+        PublicAccountProfileResponse result = accountService.getPublicProfileByUsername(username);
+        return ApiResponse.<PublicAccountProfileResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Retrieved public profile successfully")
+                .result(result)
+                .build();
+    }
+
+    @GetMapping("/accounts/{username}/avatar")
+    public ResponseEntity<byte[]> getUserAvatar(@PathVariable String username) {
+        byte[] image = accountService.getAvatarByUsername(username);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(image);
+    }
+
 }
