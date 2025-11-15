@@ -58,6 +58,20 @@ public class Account implements UserDetails {
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PaymentTransaction> accountTransactionList;
 
+    @Column(name = "trust_score", nullable = false, columnDefinition = "integer default 100")
+    private Integer trustScore = 100;
+
+    @PrePersist
+    public void prePersist() {
+        if (trustScore == null) trustScore = 100;
+        if (isActive == null) isActive = true;
+        if (createdAt == null) createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
     public Account() {
     }
 
