@@ -18,9 +18,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     // ✅ Khai báo endpoint cho client connect
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws") // client sẽ connect đến /ws
-                .setAllowedOriginPatterns("https://studymate.khoannh.id.vn", "http://localhost:5173") // cho phép mọi domain (dev mode)
-                .withSockJS(); // fallback nếu browser không hỗ trợ websocket
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns(
+                        "https://studymate.khoannh.id.vn",  // Domain chính
+                        "http://localhost:5173",            // Localhost
+                        "https://studymate-frontend-murex.vercel.app", // Domain hiện tại đang bị lỗi
+                        "https://*.vercel.app"              // <--- QUAN TRỌNG: Chấp nhận mọi sub-domain của Vercel
+                )
+                .withSockJS();
     }
 
     // ✅ Định nghĩa 2 "đường đi"
