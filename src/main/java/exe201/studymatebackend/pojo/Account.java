@@ -31,6 +31,9 @@ public class Account implements UserDetails {
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
+    @Column(length = 100)
+    private String bio;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -72,6 +75,7 @@ public class Account implements UserDetails {
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
     public Account() {
     }
 

@@ -27,6 +27,7 @@ public class JwtUtil {
         byte[] keyBytes = Decoders.BASE64.decode(SIGNER_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
     public String generateToken(Account account) {
         return Jwts.builder()
                 .setSubject(account.getUsername())

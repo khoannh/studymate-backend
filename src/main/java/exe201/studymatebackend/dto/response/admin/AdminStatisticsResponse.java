@@ -13,6 +13,7 @@ public class AdminStatisticsResponse {
     private Map<String, Long> roomCreationsByWeek;
     private long totalUsers;
     private long totalRooms;
+    private long totalRevenue;
     private double userGrowthRate;
     private double roomGrowthRate;
 }

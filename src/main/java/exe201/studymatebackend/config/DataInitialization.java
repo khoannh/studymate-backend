@@ -235,6 +235,7 @@ public class DataInitialization {
                 topicRepository.save(new Topic("MLN131", "Scientific socialism", true));
                 topicRepository.save(new Topic("VNR202", "History of Vietnam Communist Party", true));
                 topicRepository.save(new Topic("HCM202", "Ho Chi Minh Ideology", true));
+                topicRepository.save(new Topic("EVERYTHING", "Everything in only one room", true));
             }
 
             // ===== Package mặc định =====

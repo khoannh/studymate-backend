@@ -13,4 +13,6 @@ import lombok.Setter;
 public class UpdateAccountRequest {
     @Email(message = "Email is not valid")
     private String email;
+
+    private String bio;
 }

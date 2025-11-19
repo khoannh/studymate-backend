@@ -1,7 +1,9 @@
 package exe201.studymatebackend.service.impl;
 
 import exe201.studymatebackend.dto.response.admin.AdminStatisticsResponse;
+import exe201.studymatebackend.enums.TransactionStatus;
 import exe201.studymatebackend.repository.AccountRepository;
+import exe201.studymatebackend.repository.PaymentTransactionRepository;
 import exe201.studymatebackend.repository.RoomRepository;
 import exe201.studymatebackend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private PaymentTransactionRepository paymentTransactionRepository;
+
     @Override
     public AdminStatisticsResponse getDashboardStats() {
 
@@ -32,6 +37,7 @@ public class AdminServiceImpl implements AdminService {
 
         long totalUsers = accountRepository.count();
         long totalRooms = roomRepository.count();
+        long totalRevenue = paymentTransactionRepository.sumAmountByStatus(TransactionStatus.PAID);
 
         double userGrowth = calculateMonthGrowth(userByMonth);
         double roomGrowth = calculateMonthGrowth(roomByMonth);
@@ -43,6 +49,7 @@ public class AdminServiceImpl implements AdminService {
                 .roomCreationsByWeek(roomByWeek)
                 .totalUsers(totalUsers)
                 .totalRooms(totalRooms)
+                .totalRevenue(totalRevenue)
                 .userGrowthRate(userGrowth)
                 .roomGrowthRate(roomGrowth)
                 .build();

@@ -337,6 +337,17 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
+    public void updateRoomStatus(Integer roomID, boolean isActive) {
+        Room room = roomRepository.findByRoomID(roomID);
+        if (room == null) {
+            throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
+        }
+        room.setActive(isActive);
+        roomRepository.save(room);
+    }
+
+    @Override
+    @Transactional
     public void kickMember(Integer roomID, KickMemberRequest request) {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Integer accountID = account.getAccountID();
@@ -344,6 +355,9 @@ public class RoomServiceImpl implements RoomService {
         Room room = roomRepository.findByRoomID(roomID);
         if (room == null) {
             throw new AppException(ErrorCode.ROOM_DOES_NOT_EXIST);
+        }
+        if (!room.isActive()) {
+            throw new AppException(ErrorCode.ROOM_IS_INACTIVE);
         }
         Account member = accountRepository.findByAccountID(request.getMemberID());
         AccountRoom accountRoom = accountRoomRepository.findAccountRoomByAccountAndRoomAndLeftAtIsNull(member, room);
@@ -357,6 +371,9 @@ public class RoomServiceImpl implements RoomService {
         accountRoom.setLeftAt(LocalDateTime.now());
         accountRoomRepository.save(accountRoom);
         room.setNumberOfMembers(room.getNumberOfMembers() - 1);
+        if (room.getNumberOfMembers() == 0) {
+            room.setActive(false);
+        }
         roomRepository.save(room);
     }
 }
