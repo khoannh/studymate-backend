@@ -103,4 +103,16 @@ public class RoomController {
                 .build();
     }
 
+    @PutMapping("/room/{roomID}/status")
+    public ApiResponse<Void> updateRoomStatus(
+            @PathVariable Integer roomID,
+            @RequestParam boolean isActive
+    ) {
+        roomService.updateRoomStatus(roomID, isActive);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message(isActive ? "Kích hoạt phòng thành công" : "Vô hiệu hóa phòng thành công")
+                .build();
+    }
+
 }

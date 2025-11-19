@@ -16,9 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -44,6 +43,7 @@ public class AccountServiceImpl implements AccountService {
                             .accountID(account.getAccountID())
                             .username(account.getUsername())
                             .email(account.getEmail())
+                            .bio(account.getBio())
                             .role(account.getRole())
                             .coin(account.getCoin())
                             .createdAt(account.getCreatedAt())
@@ -66,6 +66,7 @@ public class AccountServiceImpl implements AccountService {
                         .accountID(account.getAccountID())
                         .username(account.getUsername())
                         .email(account.getEmail())
+                        .bio(account.getBio())
                         .role(account.getRole())
                         .coin(account.getCoin())
                         .createdAt(account.getCreatedAt())
@@ -127,6 +128,7 @@ public class AccountServiceImpl implements AccountService {
                 .accountID(currentUser.getAccountID())
                 .username(currentUser.getUsername())
                 .email(currentUser.getEmail())
+                .bio(currentUser.getBio())
                 .role(currentUser.getRole())
                 .coin(currentUser.getCoin())
                 .createdAt(currentUser.getCreatedAt())
@@ -134,7 +136,6 @@ public class AccountServiceImpl implements AccountService {
                 .isActive(currentUser.getIsActive())
                 .build();
     }
-
 
 
     @Override
@@ -149,12 +150,16 @@ public class AccountServiceImpl implements AccountService {
         // cập nhật email (hoặc thêm field khác tuỳ nhu cầu)
         currentUser.setEmail(request.getEmail());
         currentUser.setUpdatedAt(LocalDateTime.now());
+        if (request.getBio() != null) {
+            currentUser.setBio(request.getBio());
+        }
 
         accountRepository.save(currentUser);
 
         return UpdateAccountResponse.builder()
                 .accountID(currentUser.getAccountID())
                 .email(currentUser.getEmail())
+                .bio(currentUser.getBio())
                 .build();
     }
 
@@ -183,6 +188,7 @@ public class AccountServiceImpl implements AccountService {
 
         accountRepository.save(currentUser);
     }
+
     @Override
     public AvatarResponse uploadAvatar(MultipartFile file) {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -204,6 +210,7 @@ public class AccountServiceImpl implements AccountService {
                 .message("Avatar uploaded successfully")
                 .build();
     }
+
     @Override
     @Transactional
     public AvatarResponse updateCurrentAvatar(MultipartFile file) {
@@ -227,6 +234,7 @@ public class AccountServiceImpl implements AccountService {
                 .message("Avatar updated successfully")
                 .build();
     }
+
     @Override
     public byte[] getCurrentUserAvatar() {
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -254,6 +262,7 @@ public class AccountServiceImpl implements AccountService {
         account.setUpdatedAt(LocalDateTime.now());
         accountRepository.save(account);
     }
+
     @Override
     @Transactional
     public void unbanAccount(String username) {
@@ -288,6 +297,7 @@ public class AccountServiceImpl implements AccountService {
                 .accountID(account.getAccountID())
                 .username(account.getUsername())
                 .email(account.getEmail())
+                .bio(account.getBio())
                 .role(account.getRole())
                 .coin(account.getCoin())
                 .createdAt(account.getCreatedAt())
@@ -301,6 +311,7 @@ public class AccountServiceImpl implements AccountService {
                 .accountID(account.getAccountID())
                 .username(account.getUsername())
                 .email(account.getEmail())
+                .bio(account.getBio())
                 .role(account.getRole())
                 .coin(account.getCoin())
                 .createdAt(account.getCreatedAt())
@@ -308,6 +319,7 @@ public class AccountServiceImpl implements AccountService {
                 .isActive(account.getIsActive())
                 .build();
     }
+
     @Override
     public PublicAccountProfileResponse getPublicProfileByUsername(String username) {
         Account account = accountRepository.findByUsername(username);
@@ -319,9 +331,11 @@ public class AccountServiceImpl implements AccountService {
                 .accountID(account.getAccountID())
                 .username(account.getUsername())
                 .email(account.getEmail())
+                .bio(account.getBio())
                 .trustScore(account.getTrustScore())  // ⭐ Integer
                 .build();
     }
+
     @Override
     public byte[] getAvatarByUsername(String username) {
         Account account = accountRepository.findByUsername(username);

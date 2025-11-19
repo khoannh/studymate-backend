@@ -131,6 +131,7 @@ public class AccountController {
 
 
     @PutMapping("/accounts/{username}/ban")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ApiResponse<Void> banAccount(@PathVariable String username) {
         accountService.banAccount(username);
         return ApiResponse.<Void>builder()
@@ -138,7 +139,9 @@ public class AccountController {
                 .message("Account banned successfully")
                 .build();
     }
+
     @PutMapping("/accounts/{username}/unban")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ApiResponse<Void> unbanAccount(@PathVariable String username) {
         accountService.unbanAccount(username);
         return ApiResponse.<Void>builder()
@@ -168,6 +171,7 @@ public class AccountController {
                 .result(result)
                 .build();
     }
+
     @GetMapping("/accounts/profile/{username}")
     public ApiResponse<PublicAccountProfileResponse> getPublicProfile(@PathVariable String username) {
         PublicAccountProfileResponse result = accountService.getPublicProfileByUsername(username);

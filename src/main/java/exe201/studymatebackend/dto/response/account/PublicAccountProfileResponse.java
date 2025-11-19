@@ -9,5 +9,6 @@ public class PublicAccountProfileResponse {
     private Integer accountID;
     private String username;
     private String email;
+    private String bio;
     private Integer trustScore;
 }

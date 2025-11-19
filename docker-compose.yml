@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Service cho Backend Spring Boot
+  backend:
+    container_name: studymate-backend
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      # Cấu hình kết nối PostgreSQL
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/studymate_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      - db
+    networks:
+      - studymate-network
+    restart: on-failure
+
+  # Service cho Database PostgreSQL
+  db:
+    image: postgres:16-alpine         # Bản alpine cho nhẹ
+    container_name: studymate-db
+    ports:
+      - "5432:5432"                   # Port mặc định của Postgres
+    environment:
+      POSTGRES_DB: studymate_db       # Tên DB sẽ được tạo tự động
+      POSTGRES_USER: postgres         # Username mặc định
+      POSTGRES_PASSWORD: password     # Password (bạn có thể đổi)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Lưu dữ liệu DB
+    networks:
+      - studymate-network
+    restart: always
+
+networks:
+  studymate-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

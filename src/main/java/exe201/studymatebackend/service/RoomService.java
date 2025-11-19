@@ -24,4 +24,6 @@ public interface RoomService {
     List<GetAllMembersResponse> getMembers(Integer roomID);
 
     void kickMember(Integer roomID, KickMemberRequest request);
+
+    void updateRoomStatus(Integer roomID, boolean isActive);
 }

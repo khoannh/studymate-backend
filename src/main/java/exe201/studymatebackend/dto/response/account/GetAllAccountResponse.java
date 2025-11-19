@@ -16,6 +16,7 @@ public class GetAllAccountResponse {
     private Integer accountID;
     private String username;
     private String email;
+    private String bio;
     private Role role;
     private int coin;
     private LocalDateTime createdAt;
