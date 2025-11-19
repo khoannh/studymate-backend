@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Service cho Backend Spring Boot
   backend:
     container_name: studymate-backend
     build: .
@@ -10,29 +9,36 @@ services:
     env_file:
       - .env
     environment:
-      # Cấu hình kết nối PostgreSQL
+      # 1. Ghi đè URL Database (Thay localhost bằng tên service 'db')
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/studymate_db
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=password
-      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+
+      # 2. Map biến từ .env vào tên biến mà Spring Boot chờ đợi
+      # Cú pháp: TÊN_BIẾN_TRONG_JAVA=${TÊN_BIẾN_TRONG_FILE_ENV}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+
+      # 3. Quan trọng nhất: Bơm SIGNER_KEY vào
+      - SIGNER_KEY=${SIGNER_KEY}
+      - APP_JWT_EXPIRATION_MS=${APP_JWT_EXPIRATION_MS}
+
+      # 4. Frontend URL
+      - FRONTEND_URL=${FRONTEND_URL}
+
     depends_on:
       - db
     networks:
       - studymate-network
-    restart: on-failure
+    restart: always
 
-  # Service cho Database PostgreSQL
   db:
-    image: postgres:16-alpine         # Bản alpine cho nhẹ
+    image: postgres:16-alpine
     container_name: studymate-db
-    ports:
-      - "5432:5432"                   # Port mặc định của Postgres
     environment:
-      POSTGRES_DB: studymate_db       # Tên DB sẽ được tạo tự động
-      POSTGRES_USER: postgres         # Username mặc định
-      POSTGRES_PASSWORD: password     # Password (bạn có thể đổi)
+      POSTGRES_DB: studymate_db
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Lưu dữ liệu DB
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - studymate-network
     restart: always
