@@ -6,29 +6,42 @@ services:
     build: .
     ports:
       - "8080:8080"
+
+    # Dòng này cực quan trọng: Nó tự động load toàn bộ biến trong file .env vào container
     env_file:
       - .env
-    environment:
-      # 1. Ghi đè URL Database (Thay localhost bằng tên service 'db')
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/studymate_db
 
-      # 2. Map biến từ .env vào tên biến mà Spring Boot chờ đợi
-      # Cú pháp: TÊN_BIẾN_TRONG_JAVA=${TÊN_BIẾN_TRONG_FILE_ENV}
+    # Khai báo environment để map chính xác các biến vào Spring Boot
+    environment:
+      # 1. Database
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
 
-      # 3. Quan trọng nhất: Bơm SIGNER_KEY vào
+      # 2. JWT
       - SIGNER_KEY=${SIGNER_KEY}
       - APP_JWT_EXPIRATION_MS=${APP_JWT_EXPIRATION_MS}
 
-      # 4. Frontend URL
+      # 3. Email
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+
+      # 4. Gemini
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+
+      # 5. PayOS (Quan trọng để fix lỗi placeholder)
+      - PAYOS_CLIENT_ID=${PAYOS_CLIENT_ID}
+      - PAYOS_API_KEY=${PAYOS_API_KEY}
+      - PAYOS_CHECKSUM_KEY=${PAYOS_CHECKSUM_KEY}
+
+      # 6. Frontend
       - FRONTEND_URL=${FRONTEND_URL}
 
     depends_on:
       - db
     networks:
       - studymate-network
-    restart: always
+    restart: on-failure
 
   db:
     image: postgres:16-alpine
