@@ -14,7 +14,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -62,23 +61,35 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration config = new CorsConfiguration();
+//
+//        // Cách DUY NHẤT đang work ổn định 100% với allowCredentials = true
+//        config.addAllowedOrigin("http://localhost:3000");
+//        config.addAllowedOrigin("https://studymate-frontend-murex.vercel.app");
+//        // Nếu bạn có preview branch khác thì thêm thủ công tạm thời, ví dụ:
+//        // config.addAllowedOrigin("https://studymate-frontend-murex-git-main-yourname.vercel.app");
+//
+//        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+//        config.setAllowedHeaders(Arrays.asList("*"));
+//        config.setExposedHeaders(List.of("x-auth-token"));
+//        config.setAllowCredentials(true);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//        return source;
+//    }
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-
-        // Cách DUY NHẤT đang work ổn định 100% với allowCredentials = true
-        config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedOrigin("https://studymate-frontend-murex.vercel.app");
-        // Nếu bạn có preview branch khác thì thêm thủ công tạm thời, ví dụ:
-        // config.addAllowedOrigin("https://studymate-frontend-murex-git-main-yourname.vercel.app");
-
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(Arrays.asList("*"));
-        config.setExposedHeaders(List.of("x-auth-token"));
-        config.setAllowCredentials(true);
-
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cfg = new CorsConfiguration();
+        // Khuyến nghị: chỉ định origin FE thật thay vì "*"
+        cfg.setAllowedOriginPatterns(List.of("*"));
+        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        cfg.setAllowedHeaders(List.of("*"));
+        cfg.setAllowCredentials(true); // cần true nếu gửi cookie
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", cfg);
         return source;
     }
 }
