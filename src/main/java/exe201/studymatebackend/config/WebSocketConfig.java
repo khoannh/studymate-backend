@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws") // client sẽ connect đến /ws
-                .setAllowedOriginPatterns("*") // cho phép mọi domain (dev mode)
+                .setAllowedOriginPatterns("https://studymate.khoannh.id.vn", "http://localhost:5173") // cho phép mọi domain (dev mode)
                 .withSockJS(); // fallback nếu browser không hỗ trợ websocket
     }
 
