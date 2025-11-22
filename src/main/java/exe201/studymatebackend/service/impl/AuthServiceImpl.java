@@ -83,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
         newAccount.setEmail(registerRequest.getEmail());
         newAccount.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         newAccount.setRole(Role.USER);
-        newAccount.setCoin(10000);
+        newAccount.setCoin(10);
         newAccount.setCreatedAt(LocalDateTime.now());
         newAccount.setUpdatedAt(LocalDateTime.now());
         newAccount.setIsActive(true);
