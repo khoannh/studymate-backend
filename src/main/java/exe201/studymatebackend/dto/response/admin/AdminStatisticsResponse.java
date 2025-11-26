@@ -16,4 +16,5 @@ public class AdminStatisticsResponse {
     private long totalRevenue;
     private double userGrowthRate;
     private double roomGrowthRate;
+    private long totalPaidTransactions;
 }

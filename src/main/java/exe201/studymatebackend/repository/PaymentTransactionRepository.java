@@ -13,4 +13,7 @@ public interface PaymentTransactionRepository extends JpaRepository<PaymentTrans
     
     @Query("SELECT COALESCE(SUM(pt.amount), 0) FROM PaymentTransaction pt WHERE pt.status = :status")
     Long sumAmountByStatus(@Param("status") TransactionStatus status);
+
+    @Query("SELECT COUNT(pt) FROM PaymentTransaction pt WHERE pt.status = :status")
+    Long countByStatus(@Param("status") TransactionStatus status);
 }
