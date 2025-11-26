@@ -38,6 +38,7 @@ public class AdminServiceImpl implements AdminService {
         long totalUsers = accountRepository.count();
         long totalRooms = roomRepository.count();
         long totalRevenue = paymentTransactionRepository.sumAmountByStatus(TransactionStatus.PAID);
+        long totalPaidTransactions = paymentTransactionRepository.countByStatus(TransactionStatus.PAID);
 
         double userGrowth = calculateMonthGrowth(userByMonth);
         double roomGrowth = calculateMonthGrowth(roomByMonth);
@@ -52,6 +53,7 @@ public class AdminServiceImpl implements AdminService {
                 .totalRevenue(totalRevenue)
                 .userGrowthRate(userGrowth)
                 .roomGrowthRate(roomGrowth)
+                .totalPaidTransactions(totalPaidTransactions)
                 .build();
     }
 
